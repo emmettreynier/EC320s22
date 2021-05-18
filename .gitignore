@@ -43,3 +43,5 @@ vignettes/*.pdf
 
 # Syllabus RMD
 syllabus-ec320s22.Rmd
+
+.DS_Store
