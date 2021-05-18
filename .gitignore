@@ -37,3 +37,9 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# Any tex files 
+*.tex
+
+# Syllabus RMD
+syllabus-ec320s22.Rmd
