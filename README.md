@@ -18,7 +18,8 @@ The HTML versions of the lecture slides allow you to view animations and interac
 
 Each bullet point represents a given week.
 
-1. **Introduction to `R`**
+1. **Introduction to `R`** 
+[.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/labs/01-introduction-to-R/01-introduction-to-R.html)
 
 ## Contributors
 
