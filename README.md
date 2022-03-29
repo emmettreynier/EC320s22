@@ -8,9 +8,12 @@ This course introduces the statistical techniques that help economists learn abo
 
 The HTML versions of the lecture slides allow you to view animations and interactive features, provided that you have an internet connection. The PDF slides don't require an internet connection, but they cannot display the animations or interactive features.
 
-1. Introduction - [.html](https://rawcdn.githack.com/emmettsaulnier/EC320s22/9eb90152d308b5f25ed1f45ec9106644168b9d77/lectures/01-introduction/01-Introduction.html) [.pdf]()  
+1. **Introduction**
+[.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/01-introduction/01-Introduction.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/01-introduction/01-Introduction.pdf)  
 
+2. **Statistics Review I**  
+[.html] | [.pdf]
 
 ## Contributors
 
-Material for this course has contributions from [Ed Rubin](http://edrub.in/) ([@edrubin](https://github.com/edrubin)), [Kyle Raze](https://kyleraze.com/) ([@kyleraze](https://github.com/kyleraze)), and [Philip Economides](https://philip-economides.com/), who have taught the class prior to me and graciously made their work public. I also source some material from [Nick Huntington-Klein](https://nickchk.com/) ([@NickCH-K](https://github.com/NickCH-K)), who maintains a [trove of resources](https://nickchk.com/causalgraphs.html) for learning causal inference. 
+Material for this course has contributions from [Ed Rubin](http://edrub.in/) ([@edrubin](https://github.com/edrubin)), [Kyle Raze](https://kyleraze.com/) ([@kyleraze](https://github.com/kyleraze)), and [Philip Economides](https://philip-economides.com/)([@peconomi](https://github.com/peconomi)), who have taught the class prior to me and graciously made their work public. I also source some material from [Nick Huntington-Klein](https://nickchk.com/) ([@NickCH-K](https://github.com/NickCH-K)), who maintains a [trove of resources](https://nickchk.com/causalgraphs.html) for learning causal inference. 
