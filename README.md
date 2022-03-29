@@ -12,7 +12,7 @@ The HTML versions of the lecture slides allow you to view animations and interac
 [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/01-introduction/01-Introduction.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/01-introduction/01-Introduction.pdf)  
 
 2. **Statistics Review I**  
-[.html] | [.pdf]
+[.html]() | [.pdf]()
 
 ## Contributors
 
