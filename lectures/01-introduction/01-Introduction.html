@@ -141,7 +141,7 @@ We will use two textbooks:
 
 Lectures are not a substitute for these resources, but rather the finishing touch on solidifying your knowledge.
 
-I will post readings for each week on Canvas, do them .hi-pink[before each lecture].
+I will post readings for each week on Canvas, do them .hi-pink[before each lecture]. In the next two lectures, we will be covering the .hi-pink[Review] chapter from .pink[ItE].
 
 
 ---
@@ -172,7 +172,7 @@ layout: true
 * Don't distract others around you by goofing off on your laptop or phone  
 * Don't disrupt the class by showing up 5 minutes late  
 * The slides will be posted after class -- it is more important to write things down that we talk about which are **not** on the slides  
-* Don't come to class if you feel sick  
+* Stay home if you are feeling [symptomatic](https://coronavirus.uoregon.edu/prevention#if-sick-stay-home)  
 * Wear a mask if it makes you more comfortable  
 
 
@@ -248,7 +248,7 @@ layout: true
 
 Most econometric inquiry concerns one of two distinct goals:
 
-1. .hi-blue[Prediction:] Accurately .blue[predict] or .blue[forecast] an outcome given a set of predictors. .blue[Given what we know about] `\(\color{#6A5ACD}{x}\)`.blue[, what values do we expect] `\(\color{#6A5ACD}{y}\)` .blue[to take?]
+1. .hi-blue[Prediction:] Accurately .blue[predict] or .blue[forecast] an outcome given a set of predictors. .blue[Given what we know about] `\(\color{#4682B4}{x}\)`.blue[, what values do we expect] `\(\color{#4682B4}{y}\)` .blue[to take?]
 
 1. .hi-green[Causal identification:] .green[Estimate] the effect of an intervention on an outcome. .green[How does] `\(\color{#007935}{y}\)` .green[change when we change] `\(\color{#007935}{x}\)`.green[?]
 
@@ -541,18 +541,18 @@ theme_pander(base_size = 17, base_family = "Fira Sans", fc = met_slate)
 
 ```r
 p_load(leaflet)
-leaflet() %&gt;% addTiles() %&gt;% addMarkers(lng = -122.6793, lat = 45.51887, 
-                            popup = "Pioneer Courthouse Square")
+leaflet() |&gt; addTiles() |&gt; addMarkers(
+  lng = -122.6793, lat = 45.51887, popup = "Pioneer Courthouse Square")
 ```
 
-<div id="htmlwidget-0cfb710360ad3498b756" style="width:756px;height:432px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-0cfb710360ad3498b756">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[45.51887,-122.6793,null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Pioneer Courthouse Square",null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[45.51887,45.51887],"lng":[-122.6793,-122.6793]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-722245a0f4717c94d6cb" style="width:756px;height:432px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-722245a0f4717c94d6cb">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[45.51887,-122.6793,null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Pioneer Courthouse Square",null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[45.51887,45.51887],"lng":[-122.6793,-122.6793]}},"evals":[],"jsHooks":[]}</script>
 
 ---
 
 # .mono[R] + Animated maps (w/ .mono[gganimate])
 
-.center[![](dc_gunshots_map.gif)]
+.center[![](figs/dc_gunshots_map.gif)]
 ---
 class: inverse, center, middle
 # Getting Started with .mono[R]

@@ -179,7 +179,7 @@ We will use two textbooks:
 
 Lectures are not a substitute for these resources, but rather the finishing touch on solidifying your knowledge.
 
-I will post readings for each week on Canvas, do them .hi-pink[before each lecture].
+I will post readings for each week on Canvas, do them .hi-pink[before each lecture]. In the next two lectures, we will be covering the .hi-pink[Review] chapter from .pink[ItE].
 
 
 ---
@@ -210,7 +210,7 @@ layout: true
 * Don't distract others around you by goofing off on your laptop or phone  
 * Don't disrupt the class by showing up 5 minutes late  
 * The slides will be posted after class -- it is more important to write things down that we talk about which are **not** on the slides  
-* Don't come to class if you feel sick  
+* Stay home if you are feeling [symptomatic](https://coronavirus.uoregon.edu/prevention#if-sick-stay-home)  
 * Wear a mask if it makes you more comfortable  
 
 
@@ -286,7 +286,7 @@ layout: true
 
 Most econometric inquiry concerns one of two distinct goals:
 
-1. .hi-blue[Prediction:] Accurately .blue[predict] or .blue[forecast] an outcome given a set of predictors. .blue[Given what we know about] $\color{#6A5ACD}{x}$.blue[, what values do we expect] $\color{#6A5ACD}{y}$ .blue[to take?]
+1. .hi-blue[Prediction:] Accurately .blue[predict] or .blue[forecast] an outcome given a set of predictors. .blue[Given what we know about] $\color{#4682B4}{x}$.blue[, what values do we expect] $\color{#4682B4}{y}$ .blue[to take?]
 
 1. .hi-green[Causal identification:] .green[Estimate] the effect of an intervention on an outcome. .green[How does] $\color{#007935}{y}$ .green[change when we change] $\color{#007935}{x}$.green[?]
 
@@ -632,17 +632,17 @@ theme_pander(base_size = 17, base_family = "Fira Sans", fc = met_slate)
 
 # .mono[R] + Maps
 
-```{R, example: leaflet, fig.height = 6, dev = "svg"}
+```{R, example: leaflet, fig.height = 6}
 p_load(leaflet)
-leaflet() %>% addTiles() %>% addMarkers(lng = -122.6793, lat = 45.51887, 
-                            popup = "Pioneer Courthouse Square")
+leaflet() |> addTiles() |> addMarkers(
+  lng = -122.6793, lat = 45.51887, popup = "Pioneer Courthouse Square")
 ```
 
 ---
 
 # .mono[R] + Animated maps (w/ .mono[gganimate])
 
-.center[![](dc_gunshots_map.gif)]
+.center[![](figs/dc_gunshots_map.gif)]
 ---
 class: inverse, center, middle
 # Getting Started with .mono[R]
