@@ -44,4 +44,7 @@ vignettes/*.pdf
 # Syllabus RMD
 syllabus-ec320s22.Rmd
 
+# Old course materials
+old-materials/
+
 .DS_Store
