@@ -239,8 +239,9 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Introduction to R</h1>
-<h4 class="author"><div class="line-block">Giorgi Nikolaishvili, Kyle Raze, Youssef Ait Benasser, &amp; Saurabh Gupta<br />
+<h1 class="title toc-ignore"><strong>Introduction to R</strong></h1>
+<h4 class="author"><div class="line-block"><strong>Modifications:</strong> Giorgi Nikolaishvili<br />
+<strong>Original Authors:</strong> Kyle Raze, Youssef Ait Benasser, &amp; Saurabh Gupta<br />
 EC 320: Introduction to Econometrics<br />
 University of Oregon</div></h4>
 <h4 class="date">Spring 2022</h4>
@@ -248,53 +249,133 @@ University of Oregon</div></h4>
 </div>
 
 
+<div id="labs-vs.-lectures" class="section level2">
+<h2>Labs vs. Lectures</h2>
+<p><strong>Lectures:</strong> learning new econometric concepts, math, research design, etc.</p>
+<p><strong>Labs:</strong> gathering tools to apply the above concepts to real data.</p>
+</div>
+<div id="a-little-bit-about-me" class="section level2">
+<h2>A Little Bit About Me</h2>
+<p>Full name: Giorgi Nikolaishvili – you can either refer to me as Gio (“G” pronounced as in “great” or “Google”), or George.</p>
+<p>Tbilisi, Georgia -&gt; Washington, D.C. -&gt; Tbilisi, Georgia -&gt; Kyiv, Ukraine -&gt; Boston, MA -&gt; Eugene, OR.</p>
+<p>Like Emmett, I’m also a 3rd-year Economics PhD Candidate.</p>
+<p>Research areas: macroeconomics &amp; time series econometrics.</p>
+<p>I study how the banking and financial sectors evolve over time using statistical modeling.</p>
+<p>I use R to work with data, and Julia to construct statistical algorithms.</p>
+<p>This quarter I started learning C and C++ from scratch – so we’re in the same boat in terms of learning new languages!</p>
+</div>
+<div id="what-is-r" class="section level2">
+<h2>What is R?</h2>
+<ul>
+<li><p>R is a programming language and environment for statistical computing and graphics.</p></li>
+<li><p>R provides a wide variety of statistical and graphical techniques, and is highly extensible.</p></li>
+<li><p>R is <em>not</em> a general-purpose programming language.</p></li>
+<li><p>R is free and open-source.</p></li>
+<li><p>R is used mainly by statisticians, both in the private sector (data scientists) and academia.</p></li>
+<li><p>R is used extensively within the economics profession due to its ease-of-use, flexibility, and reproducibility.</p></li>
+</ul>
+</div>
+<div id="what-is-rstudio" class="section level2">
+<h2>What is RStudio?</h2>
+<p>RStudio is an IDE (Integrated Development Environment) for R.</p>
+<p>R is the language and RStudio helps us interact with R.</p>
+<p>Basically, if R is the engine, chassis, wheels, etc. of a car, then RStudio is its dashboard containing various buttons and monitors that, while “unneccessary”, can make the driving experience easier and more effective.</p>
+<p>You can still program in R without RStudio, but RStudio is useless without R.</p>
+</div>
 <div id="installation" class="section level2">
 <h2>Installation</h2>
-<p>Having R and R Studio on your laptop will allow you to work on problem sets and explore the magnificent functionality of R outside the lab. R is the language and R Studio helps us interact with R. It is important that you <strong>install R before you install R Studio.</strong></p>
+<p>Having R and RStudio on your laptop will allow you to work on problem sets and explore the functionality of R outside the lab.</p>
+<p>It is important that you <strong>install R before you install R Studio.</strong></p>
 <div id="install-r" class="section level3">
 <h3>Install R</h3>
-<p>In your web browser, go to <a href="https://www.r-project.org">r-project.org</a> and then click <a href="https://cran.r-project.org/mirrors.html">download R</a>. At this point, you’ll be directed to a page with a list of institutions that host the Comprehensive R Archive Network (CRAN). The idea is to pick an institution near you. Scroll down to USA and click the link for either <a href="https://cran.cnr.berkeley.edu">UC Berkeley</a> or <a href="https://ftp.osuosl.org/pub/cran/">OSU</a>. The choice is arbitrary, but you can maintain a Beaver-free machine by picking Berkeley. Also, the Ducks play Cal this week. Know your enemy.</p>
-<p><strong>Windows Instructions:</strong> If you have a Windows machine, click <code>Download R for Windows</code> then <code>install R for the first time</code> then <code>Download R 3.6.1 for Windows</code>. To complete installation, run the <code>.exe</code> file you downloaded.</p>
-<p><strong>Mac Instructions:</strong> If you have a Mac, click <code>Download R for (Mac) OS X</code> then <code>R-3.6.1.pkg</code> under “latest release.” To complete installation, run the <code>.pkg</code> file you downloaded.</p>
+<p>In your web browser, go to <a href="https://www.r-project.org">r-project.org</a> and then click <a href="https://cran.r-project.org/mirrors.html">download R</a>. At this point, you’ll be directed to a page with a list of institutions that host the Comprehensive R Archive Network (CRAN). The idea is to pick an institution near you. Scroll down to USA and click the link for either <a href="https://cran.cnr.berkeley.edu">UC Berkeley</a> or <a href="https://ftp.osuosl.org/pub/cran/">OSU</a>.</p>
+<p><strong>Windows Instructions:</strong> If you have a Windows machine, click <code>Download R for Windows</code> then <code>install R for the first time</code> then <code>Download R 4.1.3 for Windows</code>. To complete installation, run the <code>.exe</code> file you downloaded.</p>
+<p><strong>Mac Instructions:</strong> If you have a Mac, click <code>Download R for (Mac) OS X</code> then <code>R-4.1.3.pkg</code> under “latest release.” To complete installation, run the <code>.pkg</code> file you downloaded.</p>
 <p><strong>Linux Instructions:</strong> If you run a Linux distro, note that installation instructions vary by distro. That said, you probably know what you’re doing.</p>
 </div>
-<div id="install-r-studio" class="section level3">
-<h3>Install R Studio</h3>
-<p>In your web browser, go to <a href="https://rstudio.com/products/rstudio/">rstudio.com/products/rstudio/</a>, scroll down to R Studio Desktop, and then click <a href="https://rstudio.com/products/rstudio/download/">Download RStudio Desktop</a> under “Open Source Edition.” Scroll down to “Installers for Supported Platforms” and click the link that corresponds with your operating system. To complete installation, run the installer you downloaded.</p>
+<div id="install-rstudio" class="section level3">
+<h3>Install RStudio</h3>
+<ul>
+<li>In your web browser, go to <a href="https://rstudio.com/products/rstudio/">rstudio.com/products/rstudio/</a>, scroll down to R Studio Desktop, and then click <a href="https://rstudio.com/products/rstudio/download/">Download RStudio Desktop</a> under “Open Source Edition.” Scroll down to “All Installers” and click the link that corresponds with your operating system.</li>
+<li>To complete installation, run the installer you downloaded.</li>
+</ul>
 </div>
 </div>
 <div id="r-basics" class="section level2">
 <h2>R Basics</h2>
-<div id="using-the-console" class="section level3">
-<h3>Using the console</h3>
-<p>When you open R Studio for the first time, you should notice three panels. The large panel to the left is the <strong>console</strong>. This is where you run code that tells R what to do. You can also use the console as a calculator. For example, if you type <code>5+5*2-1</code> in the console and hit <code>Enter</code>, then R will return</p>
-<pre><code>## [1] 14</code></pre>
-<p>in the console.</p>
+<p>In this section we learn the absolute basic elements of R.</p>
+<div id="r-as-a-calculator" class="section level3">
+<h3>R as a Calculator</h3>
+<p>Addition:</p>
+<pre class="r"><code>2+2</code></pre>
+<pre><code>## [1] 4</code></pre>
+<p>Subtraction:</p>
+<pre class="r"><code>2-2</code></pre>
+<pre><code>## [1] 0</code></pre>
+<p>Multiplication:</p>
+<pre class="r"><code>2*2</code></pre>
+<pre><code>## [1] 4</code></pre>
+<p>Division:</p>
+<pre class="r"><code>2/2</code></pre>
+<pre><code>## [1] 1</code></pre>
+<p>Exponentiation:</p>
+<pre class="r"><code>2^2</code></pre>
+<pre><code>## [1] 4</code></pre>
+<p>(Natural) logarithms:</p>
+<pre class="r"><code>log(2)</code></pre>
+<pre><code>## [1] 0.6931472</code></pre>
 </div>
-<div id="everything-is-an-object" class="section level3">
-<h3>Everything is an object</h3>
-<p>The upper-right panel is the <strong>global environment</strong>. This is where R Studio stores datasets, user-defined functions, and other <strong>objects</strong>.</p>
-<p>To define an object, you use the <strong>assignment operator</strong> <code>&lt;-</code>. For example, suppose that you want to assign the number 5 to an object called <code>a</code>. In the console, you would type</p>
-<pre class="r"><code>a &lt;- 5</code></pre>
-<p>which reads “<code>a</code> gets 5.” When you execute this code (by hitting <code>Enter</code>), <code>a</code> will show up in the global environment. Hovering your cursor over <code>a</code> in the global environment tells you that <code>a</code> is a numeric object.</p>
-<p>There are other kinds of objects, too. For example,</p>
-<pre class="r"><code>b &lt;- &quot;I Love Metrics&quot;</code></pre>
-<p>is a character object, and</p>
-<pre class="r"><code>mat &lt;- matrix(c(1, 2, 3, 4),
-              nrow = 2)</code></pre>
-<p>is a matrix.</p>
-<p>One of the nice features of R is that it can store multiple objects at a time. This is especially useful for analyzing data in a <code>data.frame</code> object and then storing the results in another <code>data.frame</code> object. It is also useful for cleaning and merging data. You might think that the ability to store multiple datasets is a trivial feature, but many other statistics packages can’t do this.</p>
+<div id="variables" class="section level3">
+<h3>Variables</h3>
+<p>It is often useful to store information into objects/variables.</p>
+<pre class="r"><code>a &lt;- 2
+b &lt;- 3
+c &lt;- a * b + a^b - log(b)/a</code></pre>
+<p>The operator <code>&lt;-</code> is referred to as the assignment operator.</p>
+<p>Let’s print variable <code>c</code> to see what it looks like:</p>
+<pre class="r"><code>print(c) </code></pre>
+<pre><code>## [1] 13.45069</code></pre>
+<p>There exist many different classes of objects. Let’s see what class object <code>c</code> belongs to:</p>
+<pre class="r"><code>class(c)</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p>We can also create objects of class “character” (essentially text):</p>
+<pre class="r"><code>sometext &lt;- &quot;Hello World&quot; 
+class(sometext) </code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>There are many other object classes – we will run into new ones throughout the quarter. A nice reference for the universe of standard object classes (data types) can be found <a href="https://www.tutorialspoint.com/r/r_data_types.htm">here</a>.</p>
+</div>
+<div id="functions" class="section level3">
+<h3>Functions</h3>
+<p>Functions take objects as inputs, and generate outputs that can be stored as new objects.</p>
+<p>We’ve already run into one function – <code>class</code>.</p>
+<p>The <code>class</code> function takes any object as an input, and generates its class as an output.</p>
+<p>Another great example of a function is <code>c</code>, which takes multiple inputs (of comparable dimensions) and combines them into a single vector:</p>
+<pre class="r"><code>testvec &lt;- c(a,b,c)
+print(testvec)</code></pre>
+<pre><code>## [1]  2.00000  3.00000 13.45069</code></pre>
+<p>We may now access the values of objects <code>a</code>, <code>b</code>, and <code>c</code> as elements of <code>testvec</code>:</p>
+<pre class="r"><code>testvec[2]</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p>We may also create out own functions:</p>
+<pre class="r"><code>add &lt;- function(arg1, arg2){
+  arg1 + arg2
+}
+add(1,2)</code></pre>
+<pre><code>## [1] 3</code></pre>
 </div>
 <div id="packages" class="section level3">
 <h3>Packages</h3>
-<p>R functions come in packages. When you open a fresh R session in R Studio, a number of packages come pre-loaded. These include packages with common math and statistics functions and are known collectively as “base R.” Base R is wonderful, but non-default packages offer a great deal of flexibility and functionality.</p>
+<p>R functions come in packages.</p>
+<p>Each package contains a library of specialized functions.</p>
+<p>Think of a package as a toolbox, and its functions as the actual tools – a package simply keeps functions neatly grouped, organized, and labeled.</p>
+<p>When you open a fresh R session in RStudio, a number of packages come pre-loaded. These include packages with common math and statistics functions and are known collectively as “base R.”</p>
+<p>Base R is wonderful, but non-default packages offer a great deal of flexibility and functionality.</p>
 <p><strong>Install a package:</strong> <code>install.packages(&quot;package.name.here&quot;)</code></p>
 <ul>
 <li>Replace <code>package.name.here</code> with the name of the package you want to install.</li>
 <li>Make sure the name of the package is in quotes.</li>
 <li>You only have to install a package once.</li>
 </ul>
-<p>Alternatively, you can click on the <code>Packages</code> tab of the bottom-right panel:</p>
 <p><strong>Load a package:</strong> <code>library(package.name.here)</code></p>
 <ul>
 <li>To use functions from a non-base package, you need to load the package at the beginning of each new R session.</li>
@@ -311,8 +392,8 @@ University of Oregon</div></h4>
 </ul>
 </div>
 </div>
-<div id="r-scripts" class="section level3">
-<h3>R scripts</h3>
+<div id="r-scripts-vs.-the-console" class="section level3">
+<h3>R Scripts vs. The Console</h3>
 <p>To produce reproducible R code, it is best to use scripts. Open a new R script file with the <code>.R</code> extension by clicking <code>File</code> then <code>New File</code> then <code>R Script</code>. We will write our first script to generate a histogram and scatter plot using <code>ggplot2</code>.</p>
 </div>
 <div id="ggplot2" class="section level3">
