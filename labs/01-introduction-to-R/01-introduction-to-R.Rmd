@@ -229,20 +229,20 @@ We will often need to load several packages in a single session. One way to do t
 - When you want to load additional packages, you can then execute `p_load(package.1, package.2, package.3)`.
 - **Added bonus:** `p_load` first checks to see if the packages are installed. If they aren't, then it will install them for you.
 
+```{r}
+library(pacman)
+p_load(ggplot2, pracma)
+```
+
+We have now loaded (and possibly installed) two packages called `ggplot2` and `pracma`. 
+The former provides plotting capabilities, and the latter allows for easy random number generation.
+We will use both of these packages below.
+
 ### R Scripts vs. The Console
 
 To produce reproducible R code, it is best to use scripts. 
 Open a new R script file with the `.R` extension by clicking `File` then `New File` then `R Script`. 
-We will write our first script to generate a histogram and scatter plot using `ggplot2`.
-
-### `ggplot2`
-
-Start by writing code to install and load `ggplot2`.
-
-```{r}
-library(pacman)
-p_load(ggplot2)
-```
+We will write our first script to generate a scatter plot using `ggplot2`.
 
 - To execute *one line of your script*, click the line you want to run and then click `Run` at the upper-right corner of your R script. A quicker alternative is to click the line you want to run and then use the keyboard shortcut `Ctrl` `Enter`. 
 - To execute *the entire script*, click `Source` at the upper-right corner of your R script or use the keyboard shortcut `Ctrl` `Alt` `R`.
@@ -253,29 +253,51 @@ p_load(ggplot2)
 # This is a comment. R will ignore it.
 ```
 
-Check out the example dataset `midwest` from `ggplot2`. You can view the first few rows of the dataset with variable names by using the `head` function.
+### Data Frames
+
+A data frame is a class of object often used to construct and store datasets. 
+
+Let's starting by creating two variables, `var1` and `var2` that each contain 10 random numbers between 0 and 1.
 
 ```{r}
-head(midwest)
+# Create `var1` and `var2`
+var1 <- rand(10, 1)
+var2 <- rand(10, 1)
 ```
 
-Next, make a histogram of county poverty rates (measured by the variable `percbelowpoverty`) using the `ggplot` function. You will need to tell `ggplot` 
-
-- The name of the dataset.
-- The name of the variable.
-- The type of graph (in this case, `geom_histogram()`).
+Now if we would like to store `var1` and `var2` into a single table, we may create a data frame:
 
 ```{r}
-ggplot(data = midwest, aes(x = percbelowpoverty)) + 
-  geom_histogram()
+# Create data frame containing `var1` and `var2`
+df   <- data.frame(var1, var2)
+
+# Print data frame
+print(df)
 ```
 
-How many counties have poverty rates over 40 percent? What is the modal poverty rate?
+### Plotting with `ggplot2`
 
-To visualize relationships between variables, you can make a scatter plot. Do poverty rates appear positively or negatively correlated with race, as measured by the variable `percblack`?
+To visualize relationships between variables stored in a data frame, you can make a scatter plot.
 
 ```{r}
-ggplot(data = midwest, aes(x = percblack, y = percbelowpoverty)) + 
+# Plot `var2` on `var1`
+ggplot(data = df, aes(x = var1, y = var2)) + 
+  geom_point()
+```
+
+Now let's do the same thing using more data:
+
+```{r}
+
+# Create `var1` and `var2`
+var1 <- rand(1000, 1)
+var2 <- rand(1000, 1)
+
+# Create data frame containing `var1` and `var2`
+df   <- data.frame(var1, var2)
+
+# Plot `var2` on `var1`
+ggplot(data = df, aes(x = var1, y = var2)) + 
   geom_point()
 ```
 
