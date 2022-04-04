@@ -8,11 +8,9 @@ This course introduces the statistical techniques that help economists learn abo
 
 The HTML versions of the lecture slides allow you to view animations and interactive features, provided that you have an internet connection. The PDF slides don't require an internet connection, but they cannot display the animations or interactive features.
 
-1. **Introduction**
-[.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/01-introduction/01-Introduction.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/01-introduction/01-Introduction.pdf)  
+1. **Introduction** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/01-introduction/01-Introduction.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/01-introduction/01-Introduction.pdf)  
 
-2. **Statistics Review I**  
-[.html]() | [.pdf]()
+2. **Statistics Review I** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/02-review/02-Review.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/02-review/02-Review.pdf)
 
 ## Labs
 

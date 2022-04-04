@@ -19,10 +19,10 @@ options(htmltools.dir.version = FALSE)
 library(pacman)
 p_load(ggthemes, viridis, knitr, extrafont, tidyverse, magrittr, latex2exp, parallel, Ecdat, wooldridge, dslabs, ggforce)
 # Define colors
-red_pink <- "#e64173"
+red_pink <- "#EC7662"
 met_slate <- "#23373b" # metropolis font color
 # Notes directory
-dir_slides <- "Lectures/02-Review/"
+dir_slides <- "lectures/02-Review/"
 # Knitr options
 opts_chunk$set(
   comment = "#>",
@@ -67,8 +67,8 @@ theme_empty <- theme_bw() + theme(
 
 The first computational problem set has been posted. The first analytical problem set will be posted after class today.  
 
-- Due next Monday on Canvas by 5pm.
-- Homework due every week, Computational Mondays at 5pm and Analytical Fridays at 5pm.  
+- Due next Monday on Canvas by 11:59pm.
+- Homework due every week, Computational Mondays at 11:59pm and Analytical Fridays at 11:59pm.  
 
 Any issues with .mono[R]?
 
@@ -398,7 +398,7 @@ __Notation:__ capital letters for random variables (_e.g._, $X$, $Y$, or $Z$) an
 __Example 1:__ Flipping a coin.
 
 - .hi-green[Events:] heads or tails.
-- Random Variable X: Win 1USD if heads ($x_i=1$), pay 1USD if tails ($x_i=-1$)
+- Random Variable X: Win 1USD if heads, $x_i=1$, pay 1USD if tails, $x_i=-1$  
 - .hi-purple[Sample Space:] $\{-1,1\}$
 
 --
@@ -1068,7 +1068,7 @@ $$
 
 exclude: true
 
-```{R generate pdfs, include = F, eval = F}
+```{R generate pdfs, include = F, eval = T}
 #remotes::install_github('rstudio/pagedown')
 library(pagedown)
 pagedown::chrome_print("02-Review.html", output = "02-Review.pdf")
