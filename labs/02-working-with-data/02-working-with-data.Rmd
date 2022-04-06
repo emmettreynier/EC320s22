@@ -1,0 +1,50 @@
+---
+title: "**Working with Data**"
+author: |
+        | Giorgi Nikolaishvili
+        | EC 320: Introduction to Econometrics
+        | University of Oregon
+date: "Spring 2022"
+output: 
+  html_document:
+    theme: flatly  
+    includes:
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+      
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F, cache = T)
+```
+
+## Creating and Managing Projects
+
+Text.
+
+## Writing and Reading `.csv` Files
+
+Text.
+
+## Tidy Data
+
+Text.
+
+### Example: `gapminder`
+
+Text.
+
+### Selecting Subsamples 
+
+Text.
+
+### Transforming Data
+
+Text.
+
+### Summarizing Data 
+
+Text.
+
