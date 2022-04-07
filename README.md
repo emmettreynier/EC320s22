@@ -13,7 +13,7 @@ The HTML versions of the lecture slides allow you to view animations and interac
 2. **Statistics Review I** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/02-review/02-Review.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/02-review/02-Review.pdf)
 
 3. **Statistics Review II** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/03-review/03-Review.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/03-review/03-Review.pdf)  
-4. **The Fundamental Problem of Econometrics** 
+4. **The Fundamental Problem of Econometrics** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/04-fun-problem/04-fun-problem.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/04-fun-problem/04-fun-problem.pdf)  
 
 ## Labs
 
