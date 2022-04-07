@@ -1,7 +1,8 @@
 ---
 title: "**Working with Data**"
 author: |
-        | Giorgi Nikolaishvili
+        | **Modifications:** Giorgi Nikolaishvili
+        | **Original Authors:** Undetermined Group of Past PhD Students
         | EC 320: Introduction to Econometrics
         | University of Oregon
 date: "Spring 2022"
@@ -20,31 +21,308 @@ output:
 knitr::opts_chunk$set(echo = T, warning = F, message = F, cache = T)
 ```
 
-## Creating and Managing Projects
+## Recap 
 
-Text.
+What we learned last week:
+
+- Math operators in R
+- Variables (objects) in R
+- Functions in R
+- Variable classes in R
+- Loading packages (using `pacman`)
+- Data frames
+- Basic plotting (using `ggplot2`)
+
+Some notes on the computational assignment and other more general notes:
+
+- You should never hard-code / manually copy any values from a dataset!
+
+```{r}
+x <- mean(mtcars$mpg)
+x
+```
+
+- `.Rmd` files don't knit when your code has a line with `install.packages()` in which you are installing a package that already exists on your machine. 
+Generally, you should only use `install.packages()` in the console -- after you've installed a package once, it will exist on your computer forever.
+Many of you put the `install.packages("pacman")` line in your `.Rmd`s and ran into knitting issues -- after the initial installation of `pacman` you only need to use `library(pacman)` to load the `pacman` package, and then simply use the `p_load` function to install/load other packages you need.
+
+- Get started with your computational assignments early! 
+There is no guarantee that I will be able to help you out if you run into issues on the day of the deadline.
+
+- If you have questions, you should: **(1)** come to my office hours; **(2)** if you can't do (1) then you should send me an email in which you state a specific question or problem you are running into; **(3)** if you don't have a specific question/problem and instead are simply confused/lost/unsure, then refer to (1) or email me to schedule a one-on-one meeting in which I can set you on the right track. 
+
+- Please don't email me an attachment of all of your work with the question ``Am I doing everything right?'' :~)
+I can't answer a general question like that for a variety of practical and ethical reasons.
+
+- **Attend the labs or watch the full recording. Not every piece of necessary information will be given in these lab note documents -- I might mention and demonstrate crucial concepts on the fly.**
 
 ## Writing and Reading `.csv` Files
 
-Text.
+The `mtcars` dataset comes pre-loaded with R for us to play around with.
+
+Suppose I want to save `mtcars` as a `.csv` file on my computer.
+
+I would use the `write.csv` function to do so. 
+
+The first input to this function is the data frame object in question.
+The second input is the path for the `.csv` file that is to be written (including the name of the file at the very end). 
+
+```{r}
+# Save `mtcars` dataframe as `.csv` file 
+write.csv(mtcars, "C:/Users/gioni/Box/uo_phd_y3/spring_ec320/EC320s22/labs/02-working-with-data/data.csv")
+```
+
+In the above chunk, I've saved `mtcars` as a `.csv` file called `data.csv` in a specific directory (folder) on my computer.
+
+Now, suppose I would like to import the data in `data.csv` and store it in a dataframe called `df` in my current instance of R. 
+
+I would use the `read.csv` function to do so. 
+
+```{r}
+# Import `data.csv` and store as data frame
+df <- read.csv(file = "C:/Users/gioni/Box/uo_phd_y3/spring_ec320/EC320s22/labs/02-working-with-data/data.csv")
+```
+
+Let's preview the new data frame `df` to convince ourselves that the above code did its job:
+
+```{r}
+df
+```
+
+The `read.csv` function automatically saves the dataset as a data frame:
+
+```{r}
+class(df)
+```
+
+Alternatively, we could convert the data frame object `df` to a "tibble":
+
+```{r}
+df <- as.tbl(df)
+df
+```
+
+Tibble is an extremely similar alternative object class to data frame that is provided by the `tidyverse` package. 
+We will not go into details on tibble vs. data frame here, but the above was worth showing since you are asked to convert a data frame object to a tibble in your next computational assignment.
+For now, you can think of tibbles and data frames as being interchangeable object classes.
+
+## Working Directory
+
+If you have a large hierarchy of directories (folders) on your computer like I do, it may get cumbersome to keep typing out the full paths of datasets you want to import.
+
+For this reason, it is useful give R directions on how to reach your desired dataset relative to your present **working directory** -- this is the directory (folder) that R treats as an anchor (where R thinks you are currently "working"). 
+
+Find your current directory: `getwd()`.
+"wd" stands for "working directory". 
+
+```{r}
+getwd()
+```
+
+Show files in the current directory: `dir()`
+
+```{r}
+dir() 
+```
+Change directory: `setwd()`
+
+```{r}
+setwd("C:/Users/gioni/Box/uo_phd_y3/spring_ec320/EC320s22/labs/02-working-with-data/newfolder")
+```
+
+Notice that directories are characters (surrounded by `""`). 
+
+RStudio will help you complete file paths when you hit tab while typing in the console.
+
+You can save an object with the directory location and then return to that directory using `setwd()`. 
+
+Example:
+
+```{r}
+my_dir <- "C:/Users/gioni/Box/uo_phd_y3/spring_ec320/EC320s22/labs/02-working-with-data"
+setwd(my_dir)
+```
+
+Now let's try importing the `data.csv` file relative to our working directory:
+
+```{r}
+df <- read.csv(file = "data.csv")
+```
+
+What if we wanted to write the `data.csv` file in the `newfolder` subdirectory instead?
+
+```{r}
+write.csv(mtcars, "newfolder/data.csv")
+```
+
+To import the above dataset:
+
+```{r}
+df <- read.csv(file = "newfolder/data.csv")
+```
+
+The above paths to the `.csv` file relative to the current working directory are called **relative paths**. 
 
 ## Tidy Data
 
-Text.
+Data can be **messy**, or it can be **tidy**. 
+
+**Tidy data** has the following properties:
+
+- Every columns is a variable.
+- Every row is an observation.
+- Every cell is a single value.
+
+**Messy data** is any other arrangement of data.
+It can come in many forms, and usually needs to be thoroughly "cleaned" before it can be analyzed.
+Tidy data makes it easy for an analyst or a computer to extract needed variables because it provides a standard way of structuring a dataset.
 
 ### Example: `gapminder`
 
-Text.
+`gapminder` is a dataset that lives in the `gapminder` R package and contains data on countries' total population, GDP per capita, and life expectancy over time.
+The dataset contains the following variables:
 
-### Selecting Subsamples 
+- `gdpPercap`: GDP per capita of a country in a given year.
+- `pop`: Population of a country in a given year.
+- `lifeExp`: Life expectancy in a country in a given year.
+- `year`: The year in which an observation was taken.
+- `continent`: The continent to which a country associated with a given observation belongs.
+- `country`: The country with which a given observation is associated.
 
-Text.
+Let's load the `tidyverse` and `gapminder` packages to start working with this data.
 
-### Transforming Data
+```{r}
+library(pacman)
+p_load(tidyverse, gapminder)
+```
 
-Text.
+Print the dataset:
 
-### Summarizing Data 
+```{r}
+gapminder
+```
 
-Text.
+Print the first few observations of the dataset using the `head()` function:
 
+```{r}
+head(gapminder)
+```
+
+Print the last few observations of the dataset using the `tail()` function:
+
+```{r}
+tail(gapminder)
+```
+
+Print basic summary statistics on each of the variables contained by the dataset using the `summary()` function:
+
+```{r}
+summary(gapminder)
+```
+
+## Selecting Subsamples 
+
+Suppose we do not care about country population data.
+
+Let's the `country`, `year`, and `pop` variables and store it all together in a new tibble object called `df_countrypop`. 
+
+The `tidyverse` package provides us a handy function called `select` that allows us to grab a select set of variables from a data frame. 
+
+```{r}
+df_countrypop <- gapminder %>% select(country, year, pop)
+df_countrypop
+```
+
+The pipe operator, written as `%>%`, takes the output of one function and passes it into another function as an argument. 
+This allows us to link a sequence of analysis steps.
+
+In the above code chunk, the pipe operator automatically gives `select()` the `gapminder` tibble as an input, so that `select()` knows that `country`, `year`, and `pop` are columns that belong to `gapminder`. 
+
+The pipe operator is extremely useful! 
+Start playing around with it -- you will rely on it heavily this quarter.
+
+Alternatively (note that this is bad practice) you could have written
+
+```{r}
+# DO NOT do the following in your code!!!
+df_countrypop <- select(gapminder, country, year, pop) # This is bad.
+df_countrypop 
+```
+
+Now, suppose we only care about population data on the United States.
+Let's take the `df_countrypop` tibble we've just created and filter for US-related data only using the `filter()` function. 
+Once again, we should use the pipe operator.
+
+```{r}
+df_usapop <- df_countrypop %>% filter(country == "United States")
+df_usapop
+```
+
+The above sequence of steps is equivalent to having done the following in one go:
+
+```{r}
+df_usapop <- gapminder %>%
+              select(country, year, pop) %>%
+              filter(country == "United States")
+```
+
+Note the use of `==` inside of `filter` in the above code chunk.
+A single equal sign `=` acts as an assignment operator, while the double equal sign `==` is a **relational** operator that yields "TRUE" if two objects are equal and "FALSE" otherwise.
+
+The `filter(country == "United States")` command basically skims through all observations inside of the `gapminder %>% select(country, year, pop)` dataset and for each observation says "if the value of the `country` variable in this observation is equal to "United States", then keep this observation -- if not, then discard this observation".
+Or equivalenty "if `country == "United States"` is true for this observation, then keep it -- discard otherwise." 
+
+Let's quickly plot the data we've gathered in `df_usapop`:
+
+```{r}
+ggplot(df_usapop, aes(x = year, y = pop)) +
+  geom_line()
+```
+
+## Transforming Data
+
+We can easily create a new column of data and add it to `df_usapop` by transforming the existing columns.
+
+For example, suppose we want to express the total population values `pop` in millions and store it in a new column called `popmil`: 
+
+```{r}
+df_usapop <- df_usapop %>%
+              mutate(popmil = pop/1000000)
+df_usapop
+```
+
+Let's visual `popmil` now as a timeplot.
+
+```{r}
+ggplot(df_usapop, aes(x = year, y = popmil)) +
+  geom_line()
+```
+
+
+## Ordering Data
+
+Now let's focus on the life expectancy data of all countries in the year 1992.
+We can easily gather the above data in a new object called `df_lifeExp92` using some of the tools we've learned so far:
+
+```{r}
+df_lifeExp92 <- gapminder %>% 
+                select(country, year, lifeExp) %>%
+                filter(year == 1992)
+df_lifeExp92
+```
+
+We may use the `arrange()` function to order all of the observations in `df_lifeExp92` in increasing order with respect to the values in `lifeExp`.
+
+```{r}
+df_lifeExp92 <- df_lifeExp92 %>%
+                arrange(lifeExp)
+df_lifeExp92
+```
+
+Similarly, we may us ethe `desc()` function inside of `arrange()` to order the observations in decreasing order with respect to `lifeExp`. 
+
+```{r}
+df_lifeExp92 <- df_lifeExp92 %>%
+                arrange(desc(lifeExp))
+df_lifeExp92
+```
