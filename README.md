@@ -26,6 +26,9 @@ Each bullet point represents a given week.
 2. **Working with Data** 
 [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/labs/02-working-with-data/02-working-with-data.html)
 
+3. **Grouping, Summarizing, and Plotting Data**
+[.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/labs/03-grouping-summarizing-plotting/03-grouping-summarizing-plotting.html)
+
 ## Contributors
 
 Material for this course has contributions from [Ed Rubin](http://edrub.in/) ([@edrubin](https://github.com/edrubin)), [Kyle Raze](https://kyleraze.com/) ([@kyleraze](https://github.com/kyleraze)), and [Philip Economides](https://philip-economides.com/)([@peconomi](https://github.com/peconomi)), who have taught the class prior to me and graciously made their work public. I also source some material from [Nick Huntington-Klein](https://nickchk.com/) ([@NickCH-K](https://github.com/NickCH-K)), who maintains a [trove of resources](https://nickchk.com/causalgraphs.html) for learning causal inference. 
