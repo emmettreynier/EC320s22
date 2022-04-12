@@ -1,0 +1,62 @@
+---
+title: "**Grouping, Summarizing, and Plotting Data**"
+author: |
+        | Giorgi Nikolaishvili
+        | EC 320: Introduction to Econometrics
+        | University of Oregon
+date: "Spring 2022"
+output: 
+  html_document:
+    theme: flatly  
+    includes:
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+      
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F, cache = T)
+```
+
+## Recap 
+
+What we learned last week:
+
+- Reading and writing `.csv` files
+- Absolute vs. relative file paths
+- Tidy data
+- `select()` -- select variables
+- `filter()` -- select observations
+- `mutate()` -- create new variables
+- `arrange()` -- order observations
+- `%>%` -- piping
+
+## Grouping and Summarizing
+
+Text.
+
+### `group_by()` 
+
+Text.
+
+### `summarize()` 
+
+Text.
+
+## Plotting using `ggplot2`
+
+Text.
+
+### Histogram 
+
+Text.
+
+### Scatter Plots
+
+Text.
+
+### Line Plots 
+
+Text.
