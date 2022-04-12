@@ -13,7 +13,8 @@ The HTML versions of the lecture slides allow you to view animations and interac
 2. **Statistics Review I** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/02-review/02-Review.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/02-review/02-Review.pdf)
 
 3. **Statistics Review II** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/03-review/03-Review.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/03-review/03-Review.pdf)  
-4. **The Fundamental Problem of Econometrics** 
+4. **The Fundamental Problem of Econometrics** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/04-fun-problem/04-fun-problem.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/04-fun-problem/04-fun-problem.pdf)  
+5. **Logic of Regression** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/05-regression/05-Regression.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/05-regression/05-Regression.pdf)  
 
 ## Labs
 
@@ -21,6 +22,9 @@ Each bullet point represents a given week.
 
 1. **Introduction to `R`** 
 [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/labs/01-introduction-to-R/01-introduction-to-R.html)
+
+2. **Working with Data** 
+[.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/labs/02-working-with-data/02-working-with-data.html)
 
 ## Contributors
 

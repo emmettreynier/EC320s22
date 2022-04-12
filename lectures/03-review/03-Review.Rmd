@@ -1185,35 +1185,7 @@ Data generated in non-experimental settings.
 
 Mainstay of economic research, but __poses challenges__ to causal identification.
 
----
-# Tidy Data
 
-.more-left[
-
-```{r, echo=FALSE}
-data(murders)
-murders <- select(murders, state, population, total)
-DT::datatable(
-  murders,
-  colnames = c('<span style="color: #007935 !important">State</span>', '<span style="color: #007935 !important">Population</span>', '<span style="color: #007935 !important">Murders</span>'),
-  fillContainer = FALSE, options = list(pageLength = 6, lengthChange = FALSE, pagingType = "simple"), escape = FALSE) %>%
-  DT::formatStyle('state', color = '#9370DB') %>%
-  DT::formatStyle('population', color = '#9370DB') %>%
-  DT::formatStyle('total', color = '#9370DB') %>%
-  DT::formatStyle(0, color = '#FD5F00')
-```
-
-]
-
-.less-right[
-
-.hi-orange[Rows] represent .hi-orange[observations].
-
-.hi-green[Columns] represent .hi-green[variables].
-
-Each .hi-purple[value] is associated with an .hi-orange[observation] and a .hi-green[variable].
-
-]
 
 ---
 # Cross Sectional Data
@@ -1287,6 +1259,36 @@ The focus of this class is data analysis, but .hi[data wrangling] is a non-trivi
 - Known collectively as the `tidyverse`.
 
 ---
+# Tidy Data
+
+.more-left[
+
+```{r, echo=FALSE}
+data(murders)
+murders <- select(murders, state, population, total)
+DT::datatable(
+  murders,
+  colnames = c('<span style="color: #007935 !important">State</span>', '<span style="color: #007935 !important">Population</span>', '<span style="color: #007935 !important">Murders</span>'),
+  fillContainer = FALSE, options = list(pageLength = 6, lengthChange = FALSE, pagingType = "simple"), escape = FALSE) %>%
+  DT::formatStyle('state', color = '#9370DB') %>%
+  DT::formatStyle('population', color = '#9370DB') %>%
+  DT::formatStyle('total', color = '#9370DB') %>%
+  DT::formatStyle(0, color = '#FD5F00')
+```
+
+]
+
+.less-right[
+
+.hi-orange[Rows] represent .hi-orange[observations].
+
+.hi-green[Columns] represent .hi-green[variables].
+
+Each .hi-purple[value] is associated with an .hi-orange[observation] and a .hi-green[variable].
+
+]
+
+---
 # .mono[tidyverse]
 
 ## The [`tidyverse`](https://www.tidyverse.org): A package of packages
@@ -1345,7 +1347,7 @@ The focus of this class is data analysis, but .hi[data wrangling] is a non-trivi
 
 exclude: true
 
-```{R generate pdfs, include = F, eval = F}
+```{R generate pdfs, include = F, eval = T}
 #remotes::install_github('rstudio/pagedown')
 library(pagedown)
 pagedown::chrome_print("03-Review.html", output = "03-Review.pdf")
