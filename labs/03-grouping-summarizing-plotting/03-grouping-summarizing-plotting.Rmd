@@ -33,30 +33,215 @@ What we learned last week:
 - `arrange()` -- order observations
 - `%>%` -- piping
 
+## Loading Packages (Review)
+
+Suppose we want to load the `tidyverse` and `gapminder` packages.
+
+An **incorrect** approach:
+
+```{r eval=FALSE}
+  library(tidyverse)
+  library(gapminder)
+```
+
+Another **incorrect** approach:
+
+```{r eval=FALSE}
+  library(pacman)
+  p_load(tidyverse)
+  p_load(gapminder) 
+```
+
+The **correct** approach:
+
+```{r}
+  library(pacman) 
+  p_load(tidyverse, gapminder)
+```
+
 ## Grouping and Summarizing
 
-Text.
-
-### `group_by()` 
-
-Text.
 
 ### `summarize()` 
 
-Text.
+```{r}
+  gapminder %>%
+    filter(year == 1997) %>%
+    summarize(avgLifeExp = mean(lifeExp))
+```
+
+```{r}
+  gapminder %>%
+    filter(year == 1997) %>%
+    mutate(gdp = pop * gdpPercap) %>%
+    summarize(totGDP = sum(gdp)/(10^9)) 
+```
+
+```{r}
+  gapminder %>%
+    filter(year == 1997) %>%
+    mutate(gdp = pop * gdpPercap) %>%
+    summarize(avgLifeExp = mean(lifeExp),
+              totGDP = sum(gdp)/(10^9)) 
+```
+
+You can use the following functions inside of `summarize()`:
+
+- `mean()`
+- `sum()`
+- `median()`
+- `min()`
+- `max()` 
+
+### `group_by()`
+
+```{r}
+  gapminder %>%
+    filter(year == 1997) %>%
+    group_by(continent) %>%
+    mutate(gdp = pop * gdpPercap) %>%
+    summarize(avgLifeExp = mean(lifeExp),
+              totGDP = sum(gdp)/(10^9)) 
+```
+
+```{r}
+  gapminder %>%
+    group_by(year) %>%
+    mutate(gdp = pop * gdpPercap) %>%
+    summarize(avgLifeExp = mean(lifeExp),
+              totGDP = sum(gdp)/(10^9)) 
+```
 
 ## Plotting using `ggplot2`
 
 Text.
 
-### Histogram 
-
-Text.
-
 ### Scatter Plots
 
-Text.
+```{r}
+data_97_df <- gapminder %>%
+            filter(year == 1997) 
+```
+
+```{r}
+ggplot(data_97_df, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point()
+```
+
+```{r}
+ggplot(data_97_df, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point()
+```
+
+```{r}
+ggplot(data_97_df, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point(size = 2.5)
+```
+```{r}
+ggplot(data_97_df, aes(x = gdpPercap/1000, y = lifeExp, color = continent)) +
+  geom_point(size = 2.5) +
+  ggtitle("Life Expectancy vs. Output") +
+  labs(x = "GDP per capita (USD, 1000s)",
+       y = "Life Expectancy (Years)",
+       color = "Continent")
+```
+
+```{r}
+  ggplot(data_97_df, aes(x = gdpPercap/1000, y = lifeExp, color = continent)) +
+    geom_point(size = 2.5) +
+    ggtitle("Life Expectancy vs. Output") +
+    labs(x = "GDP per capita (USD, 1000s)",
+         y = "Life Expectancy (Years)",
+         color = "Continent") +
+    ylim(0,100) +
+    xlim(0,50) 
+```
 
 ### Line Plots 
 
-Text.
+```{r}
+continent_allyears_df <- gapminder %>%
+                      group_by(year, continent) %>%
+                      summarize(avgGDPPercap = mean(gdpPercap))
+
+continent_allyears_df
+```
+
+```{r}
+ggplot(continent_allyears_df, 
+        aes(x = year, y = avgGDPPercap/1000, color = continent)) + 
+    geom_line()
+```
+
+```{r}
+ggplot(continent_allyears_df, 
+        aes(x = year, y = avgGDPPercap/1000, color = continent)) + 
+    geom_line(size = 1) +
+    ggtitle("Continent GDP per capita Over Time") +
+    labs(x = "Year",
+         y = "Average GDP per capita (USD, 1000s)",
+         color = "Continent")
+```
+
+```{r}
+ggplot(continent_allyears_df, 
+        aes(x = year, y = avgGDPPercap/1000, color = continent)) + 
+    geom_line(size = 1) +
+    ggtitle("Continent GDP per capita Over Time") +
+    labs(x = "Year",
+         y = "Average GDP per capita (USD, 1000s)",
+         color = "Continent") +
+    scale_x_continuous(expand = c(0,0))
+```
+
+### Histograms
+
+```{r}
+data_57_97_df <- gapminder %>%
+                  filter(year %in% c(1957,2007))
+
+data_57_97_df
+```
+
+```{r}
+ggplot(data_57_97_df, aes(lifeExp)) +
+    geom_histogram()
+```
+
+```{r}
+ggplot(data_57_97_df, aes(lifeExp)) +
+    geom_histogram() +
+    ggtitle("Life Expectancy Frequency Plot") + 
+    labs(x = "Life Expectancy (Years)",
+         y = "Count")
+```
+
+```{r}
+ggplot(data_57_97_df, aes(lifeExp)) +
+    geom_histogram(aes(fill = factor(year))) +
+    ggtitle("Life Expectancy Frequency Plot") + 
+    labs(x = "Life Expectancy (Years)",
+         y = "Count", 
+         fill = "Year")
+```
+
+```{r}
+ggplot(data_57_97_df, aes(lifeExp)) +
+    geom_histogram(aes(fill = factor(year)), 
+                    binwidth = 5) +
+    ggtitle("Life Expectancy Frequency Plot") + 
+    labs(x = "Life Expectancy (Years)",
+         y = "Count", 
+         fill = "Year")
+```
+
+```{r}
+ggplot(data_57_97_df, aes(lifeExp)) +
+    geom_histogram(aes(fill = factor(year)), 
+                    binwidth = 5,
+                    position = "dodge") +
+    ggtitle("Life Expectancy Frequency Plot") + 
+    labs(x = "Life Expectancy (Years)",
+         y = "Count", 
+         fill = "Year")
+```
