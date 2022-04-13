@@ -40,49 +40,114 @@ Suppose we want to load the `tidyverse` and `gapminder` packages.
 An **incorrect** approach:
 
 ```{r eval=FALSE}
-  library(tidyverse)
-  library(gapminder)
+library(tidyverse)
+library(gapminder)
 ```
 
 Another **incorrect** approach:
 
 ```{r eval=FALSE}
-  library(pacman)
-  p_load(tidyverse)
-  p_load(gapminder) 
+library(pacman)
+p_load(tidyverse)
+p_load(gapminder) 
 ```
 
 The **correct** approach:
 
 ```{r}
-  library(pacman) 
-  p_load(tidyverse, gapminder)
+library(pacman) 
+p_load(tidyverse, gapminder)
+```
+
+## Pipe Operator `%>%` (Review) 
+
+Recall that the pipe operator, `%>%`, passes an object to a function as an input.
+
+An **incorrect** approach to applying multiple functions in succession:
+
+```{r eval=FALSE}
+df <- select(mtcars, mpg, wt) # select `mpg` and `wt` columns from mtcars
+df <- filter(df, mpg >= 20)   # select observations with `mpg` > or = 20
+df <- arrange(df, mpg)        # order observations with respect to `mpg`
+```
+
+Another **incorrect** approach:
+
+```{r eval=FALSE}
+df <- arrange(filter(select(mtcars, mpg, wt), mpg >= 20), mpg)
+```
+
+The **correct** approach using the pipe operator:
+
+```{r}
+df <- mtcars %>%  
+        select(mpg, wt) %>%     # `select()` receives `mtcars`   
+        filter(mpg >= 20) %>%   # `filter()` receives `mtcars %>% select()`
+        arrange(mpg)            # `arrange()` receives `mtcars %>% select() %>% filter()`
 ```
 
 ## Grouping and Summarizing
 
+As econometricians, we sometimes want to aggregate and produce summary statistics about our data.
+
+Recall the `gapminder` dataset:
+
+```{r}
+head(gapminder) 
+```
+
+- What is the average/smallest/greatest life expectancy across all countries over the entire sample period?
+
+- What is the total GDP of the world in the year 1997?
+
+- What is the average/smallest/greatest life expectancy over the entire sample period in each continent?
+
+- What is the average/smallest/greatest life expectancy in each year in each continent?
+
+- What is the total GDP in each year in each continent?
+
+The above questions can be answered with the aid of the `summarize()` and `group_by` functions, available through `tidyverse`. 
 
 ### `summarize()` 
 
-```{r}
-  gapminder %>%
-    filter(year == 1997) %>%
-    summarize(avgLifeExp = mean(lifeExp))
-```
+The `summarize()` function takes a dataset as an input, along with instructions on how to summarize the given data and store the indicated summary into a new tibble as a variable (or multiple variables).
+
+Simple example:
 
 ```{r}
-  gapminder %>%
-    filter(year == 1997) %>%
-    mutate(gdp = pop * gdpPercap) %>%
-    summarize(totGDP = sum(gdp)/(10^9)) 
+gapminder %>%
+  summarize(avgLifeExp = mean(lifeExp))
 ```
 
+In the above code chunk, we've given `summarize()` a data input of `gapminder`, and then told it to compute the average of the `lifeExp` column using `mean()`, and store the output into a variable called `avgLifeExp`. 
+
+Now let's move on to other questions, and combine `summarize()` with other familiar functions (`filter()`, `select()`, `mutate()`, `arrange()`). 
+
+What was the average life expectancy in 1997?
+
 ```{r}
-  gapminder %>%
-    filter(year == 1997) %>%
-    mutate(gdp = pop * gdpPercap) %>%
-    summarize(avgLifeExp = mean(lifeExp),
-              totGDP = sum(gdp)/(10^9)) 
+gapminder %>%
+  filter(year == 1997) %>%
+  summarize(avgLifeExp = mean(lifeExp))
+```
+
+What was the total GDP of the world in 1997 (in 1000s of USD)?
+
+```{r}
+gapminder %>%
+  filter(year == 1997) %>%
+  mutate(gdp = pop * gdpPercap) %>%
+  summarize(totGDP = sum(gdp)/(10^9)) 
+```
+
+We can answer both of the above questions inside of a single `summarize()` command:
+
+```{r}
+gapminder %>%
+  filter(year == 1997) %>%
+  mutate(gdp = pop * gdpPercap) %>%
+  summarize(avgLifeExp = mean(lifeExp),
+            totGDP = sum(gdp)/(10^9)) 
 ```
 
 You can use the following functions inside of `summarize()`:
@@ -95,50 +160,118 @@ You can use the following functions inside of `summarize()`:
 
 ### `group_by()`
 
-```{r}
-  gapminder %>%
-    filter(year == 1997) %>%
-    group_by(continent) %>%
-    mutate(gdp = pop * gdpPercap) %>%
-    summarize(avgLifeExp = mean(lifeExp),
-              totGDP = sum(gdp)/(10^9)) 
-```
+The `group_by()` function allows us to group the observations in a dataset into different categories.
+
+For example, in the `gapminder` dataset, we know that each observation is associated with a specific country, located in a specific continent, at a specific point in time.
+
+Therefore, we could partition our data by 
+
+1. country (`group_by(country)`)
+2. continent (`group_by(continent)`)
+3. time (`group_by(year)`)
+4. country and time (`group_by(country, year)`) 
+5. continent and time (`group_by(continent, year)`)
+
+and produce summary statistics for each partition of the data.
+
+Let's see `group_by()` in action by answering some questions about the `gapminder` data.
+
+What is the total GDP of each continent in the year 1997?
 
 ```{r}
-  gapminder %>%
-    group_by(year) %>%
-    mutate(gdp = pop * gdpPercap) %>%
-    summarize(avgLifeExp = mean(lifeExp),
-              totGDP = sum(gdp)/(10^9)) 
+gapminder %>%
+  filter(year == 1997) %>%
+  group_by(continent) %>%                 # 
+  mutate(gdp = pop * gdpPercap) %>%
+  summarize(avgLifeExp = mean(lifeExp),
+            totGDP = sum(gdp)/(10^9)) 
+```
+
+What is the total world GDP in each year of the sample?
+
+```{r}
+gapminder %>%
+  group_by(year) %>%
+  mutate(gdp = pop * gdpPercap) %>%
+  summarize(avgLifeExp = mean(lifeExp),
+            totGDP = sum(gdp)/(10^9)) 
+```
+
+What is the total GDP of each continent in each year of the sample?
+
+```{r}
+gapminder %>%
+  filter(year == 1997) %>%
+  group_by(continent, year) %>%                 # 
+  mutate(gdp = pop * gdpPercap) %>%
+  summarize(avgLifeExp = mean(lifeExp),
+            totGDP = sum(gdp)/(10^9)) 
 ```
 
 ## Plotting using `ggplot2`
 
-Text.
+`ggplot2` is a package that lives inside `tidyverse` (`tidyverse` is actually a package that contains a group of packages, each of which contains a group of functions).
+
+`ggplot2` allows us to neatly visualize data! 
+
+Many academic researchers and data scientists exclusively use `ggplot2` to make graphs.
+
+Today we will learn the basics of `ggplot2` and work through some examples. 
+
+Click [here](https://ggplot2-book.org/index.html) for a wonderful free text on using ggplot.
 
 ### Scatter Plots
+
+Suppose I want to focus on `gapminder` data of the year 1997.
 
 ```{r}
 data_97_df <- gapminder %>%
             filter(year == 1997) 
 ```
 
+I suspect that GDP per capita and life expectancy are likely to be positive correlated -- in other words, higher life expectancy is likely to be associated with higher GDP per capita, and vice versa.
+
+Let's test this hypothesis non-rigorously by plotting the data in a scatterplot:
+
 ```{r}
-ggplot(data_97_df, aes(x = gdpPercap, y = lifeExp)) +
+ggplot(data_97_df, aes(x = gdpPercap, y = lifeExp)) + # Contents of the graph
+  geom_point()                                        # Type of graph
+```
+
+Seems like my hypothesis was correct (for the year 1997, at least).
+
+I know that each data point in the above scatter plot is associated with a country, but which continent is each point associated with?
+
+I would like for my graph to show me the continent associated with each point by assigning a color to each continent, and then coloring its corresponding data points accordingly.
+
+```{r}
+ggplot(data_97_df, aes(x = gdpPercap, 
+                       y = lifeExp, 
+                       color = continent)) +
   geom_point()
 ```
 
-```{r}
-ggplot(data_97_df, aes(x = gdpPercap, y = lifeExp, color = continent)) +
-  geom_point()
-```
+Great! But I'm still not quite happy with the above graph. 
+
+The points look a little too small.
+
+We can modify the properties of the plot inside of `geom_point`. 
+
+To change point size, we can simply set `size = x`, where `x` is some numeric value.
 
 ```{r}
-ggplot(data_97_df, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+ggplot(data_97_df, aes(x = gdpPercap, 
+                       y = lifeExp, 
+                       color = continent)) +
   geom_point(size = 2.5)
 ```
+
+Let's also add a title using `ggtitle()`, as well as axis and legend labels using `labs()`. 
+
 ```{r}
-ggplot(data_97_df, aes(x = gdpPercap/1000, y = lifeExp, color = continent)) +
+ggplot(data_97_df, aes(x = gdpPercap/1000,
+                       y = lifeExp, 
+                       color = continent)) +
   geom_point(size = 2.5) +
   ggtitle("Life Expectancy vs. Output") +
   labs(x = "GDP per capita (USD, 1000s)",
@@ -146,8 +279,12 @@ ggplot(data_97_df, aes(x = gdpPercap/1000, y = lifeExp, color = continent)) +
        color = "Continent")
 ```
 
+Lastly, we can manually set the intervals of the x and y axes using `xlim()` and `ylim()`, respectively.
+
 ```{r}
-  ggplot(data_97_df, aes(x = gdpPercap/1000, y = lifeExp, color = continent)) +
+  ggplot(data_97_df, aes(x = gdpPercap/1000, 
+                         y = lifeExp, 
+                         color = continent)) +
     geom_point(size = 2.5) +
     ggtitle("Life Expectancy vs. Output") +
     labs(x = "GDP per capita (USD, 1000s)",
@@ -159,29 +296,45 @@ ggplot(data_97_df, aes(x = gdpPercap/1000, y = lifeExp, color = continent)) +
 
 ### Line Plots 
 
+Now let's move on to line plots.
+
+Line plots are often used to visualize the changes in a variable over time.
+
+Suppose I am interested in the average GDP per capita of each continent for each year in my `gapminder` sample -- I can use `group_by()` and `summarize()` to obtain this type of aggregated data from the raw country-level data.
+
 ```{r}
 continent_allyears_df <- gapminder %>%
-                      group_by(year, continent) %>%
-                      summarize(avgGDPPercap = mean(gdpPercap))
+                          group_by(year, continent) %>%
+                          summarize(avgGDPPercap = mean(gdpPercap))
 
 continent_allyears_df
 ```
 
-```{r}
-ggplot(continent_allyears_df, 
-        aes(x = year, y = avgGDPPercap/1000, color = continent)) + 
-    geom_line()
-```
+I can now create a line graph of my continent-level data, in which the x-axis represents time and the y-axis represents the average GDP per capita in 1000s of USD.
 
 ```{r}
 ggplot(continent_allyears_df, 
-        aes(x = year, y = avgGDPPercap/1000, color = continent)) + 
+        aes(x = year, 
+            y = avgGDPPercap/1000, 
+            color = continent)) + 
+    geom_line()
+```
+
+We can improve the plot by making the lines thicker and adding title, axis, and legend labels. 
+
+```{r}
+ggplot(continent_allyears_df, 
+        aes(x = year, 
+            y = avgGDPPercap/1000, 
+            color = continent)) + 
     geom_line(size = 1) +
     ggtitle("Continent GDP per capita Over Time") +
     labs(x = "Year",
          y = "Average GDP per capita (USD, 1000s)",
          color = "Continent")
 ```
+
+The may further improve the plot by getting rid of excess empty intervals on the x-axis.
 
 ```{r}
 ggplot(continent_allyears_df, 
@@ -196,6 +349,10 @@ ggplot(continent_allyears_df,
 
 ### Histograms
 
+Sometimes we want to check the distributions of variables within our sample -- to do so we may use histograms.
+
+Suppose we're interested in checking the distribution of life expectancy in a subsample of `gapminder` containing observations from only the years 1957 and 2007. 
+
 ```{r}
 data_57_97_df <- gapminder %>%
                   filter(year %in% c(1957,2007))
@@ -203,10 +360,16 @@ data_57_97_df <- gapminder %>%
 data_57_97_df
 ```
 
+The conditional statement `year %in% c(1957,2007)` checks whether for each given observation `year` equals either 1957 or 2007 -- if `TRUE`, then `filter()` keeps these observations.
+
+We may now plot a simple histogram of `lifeExp` using this newly-constructed subsample of `gapminder`.
+
 ```{r}
 ggplot(data_57_97_df, aes(lifeExp)) +
     geom_histogram()
 ```
+
+Add title and axis labels:
 
 ```{r}
 ggplot(data_57_97_df, aes(lifeExp)) +
@@ -216,29 +379,37 @@ ggplot(data_57_97_df, aes(lifeExp)) +
          y = "Count")
 ```
 
+Intuitively, the distribution of `lifeExp` in this subsample is bimodal.
+
+This is because there are two distinct distributions generating two sets of observations in our dataset -- life expectancy in 1957 for each country is likely to be much lower than in 1997.
+
+Let's group the observations in our histogram by year:
+
 ```{r}
-ggplot(data_57_97_df, aes(lifeExp)) +
-    geom_histogram(aes(fill = factor(year))) +
+ggplot(data_57_97_df, aes(lifeExp, fill = factor(year))) +
+    geom_histogram() +
     ggtitle("Life Expectancy Frequency Plot") + 
     labs(x = "Life Expectancy (Years)",
          y = "Count", 
          fill = "Year")
 ```
 
+Perhaps we would like to make the bins wider:
+
 ```{r}
-ggplot(data_57_97_df, aes(lifeExp)) +
-    geom_histogram(aes(fill = factor(year)), 
-                    binwidth = 5) +
+ggplot(data_57_97_df, aes(lifeExp, fill = factor(year))) +
+    geom_histogram(binwidth = 5) +
     ggtitle("Life Expectancy Frequency Plot") + 
     labs(x = "Life Expectancy (Years)",
          y = "Count", 
          fill = "Year")
 ```
 
+Instead of stacking the two groups of data on top of each other, we might instead like to give each group a separate bar per bin:
+
 ```{r}
-ggplot(data_57_97_df, aes(lifeExp)) +
-    geom_histogram(aes(fill = factor(year)), 
-                    binwidth = 5,
+ggplot(data_57_97_df, aes(lifeExp, fill = factor(year))) +
+    geom_histogram( binwidth = 5,
                     position = "dodge") +
     ggtitle("Life Expectancy Frequency Plot") + 
     labs(x = "Life Expectancy (Years)",
