@@ -1639,7 +1639,7 @@ the output into a variable called <code>avgLifeExp</code>.</p>
 ##   avgLifeExp
 ##        &lt;dbl&gt;
 ## 1       65.0</code></pre>
-<p>What was the total GDP of the world in 1997 (in 1000s of USD)?</p>
+<p>What was the total GDP of the world in 1997 (in billions of USD)?</p>
 <pre class="r"><code>gapminder %&gt;%
   filter(year == 1997) %&gt;%
   mutate(gdp = pop * gdpPercap) %&gt;%
@@ -1687,7 +1687,8 @@ continent, at a specific point in time.</p>
 <p>and produce summary statistics for each partition of the data.</p>
 <p>Let’s see <code>group_by()</code> in action by answering some
 questions about the <code>gapminder</code> data.</p>
-<p>What is the total GDP of each continent in the year 1997?</p>
+<p>What is the total GDP (in billions of USD) of each continent in the
+year 1997?</p>
 <pre class="r"><code>gapminder %&gt;%
   filter(year == 1997) %&gt;%
   group_by(continent) %&gt;%                 # 
@@ -1702,7 +1703,8 @@ questions about the <code>gapminder</code> data.</p>
 ## 3 Asia            68.0 12791.
 ## 4 Europe          75.5 11508.
 ## 5 Oceania         78.2   579.</code></pre>
-<p>What is the total world GDP in each year of the sample?</p>
+<p>What is the total world GDP (in billions of USD) in each year of the
+sample?</p>
 <pre class="r"><code>gapminder %&gt;%
   group_by(year) %&gt;%
   mutate(gdp = pop * gdpPercap) %&gt;%
@@ -1723,23 +1725,28 @@ questions about the <code>gapminder</code> data.</p>
 ## 10  1997       65.0 41006.
 ## 11  2002       65.7 47266.
 ## 12  2007       67.0 58109.</code></pre>
-<p>What is the total GDP of each continent in each year of the
-sample?</p>
+<p>What is the total GDP (in billions of USD) of each continent in each
+year of the sample?</p>
 <pre class="r"><code>gapminder %&gt;%
-  filter(year == 1997) %&gt;%
   group_by(continent, year) %&gt;%                 # 
   mutate(gdp = pop * gdpPercap) %&gt;%
   summarize(avgLifeExp = mean(lifeExp),
             totGDP = sum(gdp)/(10^9)) </code></pre>
-<pre><code>## # A tibble: 5 x 4
+<pre><code>## # A tibble: 60 x 4
 ## # Groups:   continent [5]
-##   continent  year avgLifeExp totGDP
-##   &lt;fct&gt;     &lt;int&gt;      &lt;dbl&gt;  &lt;dbl&gt;
-## 1 Africa     1997       53.6  1561.
-## 2 Americas   1997       71.2 14567.
-## 3 Asia       1997       68.0 12791.
-## 4 Europe     1997       75.5 11508.
-## 5 Oceania    1997       78.2   579.</code></pre>
+##    continent  year avgLifeExp totGDP
+##    &lt;fct&gt;     &lt;int&gt;      &lt;dbl&gt;  &lt;dbl&gt;
+##  1 Africa     1952       39.1   312.
+##  2 Africa     1957       41.3   383.
+##  3 Africa     1962       43.3   457.
+##  4 Africa     1967       45.3   595.
+##  5 Africa     1972       47.5   784.
+##  6 Africa     1977       49.6   972.
+##  7 Africa     1982       51.6  1146.
+##  8 Africa     1987       53.3  1254.
+##  9 Africa     1992       53.6  1365.
+## 10 Africa     1997       53.6  1561.
+## # ... with 50 more rows</code></pre>
 </div>
 </div>
 <div id="plotting-using-ggplot2" class="section level2">
