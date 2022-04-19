@@ -1,0 +1,260 @@
+---
+title: "**Simple Linear Regression**"
+author: |
+        | Giorgi Nikolaishvili
+        | EC 320: Introduction to Econometrics
+        | University of Oregon
+date: "Spring 2022"
+output: 
+  html_document:
+    theme: flatly  
+    includes:
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+      
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F, cache = T)
+```
+
+## Recap 
+
+What we learned last week:
+
+- Grouping/slicing data using `group_by()`
+- Summarizing data using `summarize()` 
+- Plotting data using `ggplot2` 
+
+## Simple Linear Regression
+
+Suppose we have data on (observations of) random variables $Y$ and $X$.
+
+We would like to understand the relationship between these two variables.
+
+We may explore the relationship between $Y$ and $X$ by estimating a regression model using (running a regression on) our data.
+
+### Conceptual Overview
+
+The linear regression model:
+
+$$Y_i = \beta_0 + \beta_1 \cdot X_i + u_i$$
+
+where 
+
+- the index $i$ denotes the observation number, $i = 1,\ldots,N$
+- $Y_i$ is the $i$-th observation of the **dependent variable** (regressand)
+- $X_i$ is the $i$-th observation of the **independent variable** (regressor) 
+- $Y = \beta_0 + \beta_1 \cdot X$ is the **population regression line/function**
+- $\beta_0$ is the **intercept** of the population regression line
+- $\beta_1$ is the **slope** of the population regression line
+- $u_i$ is the **error** term (variation in $Y$ unrelated to $X$)
+
+By applying ordinary least squares (OLS) to data on variables $Y$ and $X$, we must fit the the population regression line by estimating the intercept and slope coefficient, $\beta_0$ and $\beta_1$, respectively.
+
+### Building Intuition through Simulation
+
+Let's load some packages that we will need in the rest of this document.
+
+```{r}
+library(pacman)
+p_load(tidyverse, pracma, gapminder, modelsummary, broom)
+```
+
+Let's simulate some data on the following random variables:
+
+- $X \sim N(5, 9)$  
+- $Y = 5 + 2 X + u$, where $u \sim N(0,1)$ 
+
+$X$ is a normally-distributed random variable with $E(X) = 5$ and $Var(X) = 9$.
+
+$Y$ is a normally-distributed random variable with 
+$$E(Y) \\ = E(5 + 2 X + u) \\ = 5 + 2 E(X) + E(u) \\ = 5 + 2 (5) + (0) \\ = 15 \, , $$ 
+and 
+$$Var(Y) \\ = Var(5 + 2 X + u) \\ = Var(5) + Var(2 X) + Var(u) \\ = (0) + 2^2 Var(X) + Var(u) \\ = 4 (9) + (1) \\ = 37 \, .$$
+In other words, $Y \sim N(15, 37)$.
+
+$Y$ is a function of $X$ and some noise $u$.
+
+```{r}
+# Number of observations 
+n = 300
+
+# `n` observations of random variable `X`
+# with mean 5 and std. dev 3
+X <- 5 + 3 * randn(n, 1)
+
+# `n` observations of random variable `u`
+# with mean 0 and std. dev 1
+u <- randn(n, 1)
+
+# `n` observations of random variable `Y`
+# such that Y = 5 + 2 * X + u 
+beta0 <- 5
+beta1 <- 2
+Y <- beta0 + beta1 * X + u
+
+# Create dataset with Y, X
+data_df <- tibble(Y, X)
+```
+
+```{r}
+# Plot histogram of `u`
+ggplot(data_df, aes(u)) +
+  geom_histogram(fill = "blue", alpha = 0.6) +
+  geom_vline(xintercept = 0, size = 1, linetype = "dotted") +
+  theme_minimal()
+
+# Plot histogram of `X`
+ggplot(data_df, aes(X)) +
+  geom_histogram(fill = "green", alpha = 0.6) +
+  geom_vline(xintercept = 5, size = 1, linetype = "dotted") +
+  theme_minimal()
+
+# Plot histogram of `Y`
+ggplot(data_df, aes(Y)) +
+  geom_histogram(fill = "red", alpha = 0.6) +
+  geom_vline(xintercept = 15, size = 1, linetype = "dotted") +
+  theme_minimal()
+```
+
+```{r}
+# Scatter plot of `X` and `u`
+ggplot(data_df, aes(x = u, y = X)) +
+  geom_point(color = "blue", size = 2.5, alpha = 0.6) +
+  theme_minimal() +
+  geom_hline(yintercept = mean(X), linetype="dashed", color = "red", alpha = 0.5, size = 1) +
+  geom_vline(xintercept = mean(u), linetype="dashed", color = "red", alpha = 0.5, size = 1) 
+```
+
+```{r}
+# Scatter plot of `Y` and `u`
+ggplot(data_df, aes(x = u, y = Y)) +
+  geom_point(color = "blue", size = 2.5, alpha = 0.6) +
+  theme_minimal() +
+  geom_hline(yintercept = mean(Y), linetype="dashed", color = "red", alpha = 0.5, size = 1) +
+  geom_vline(xintercept = mean(u), linetype="dashed", color = "red", alpha = 0.5, size = 1) 
+```
+
+```{r}
+# Scatter plot of `Y` and `X`
+p = ggplot(data_df, aes(x = X, y = Y)) +
+      geom_point(color = "blue", size = 2.5, alpha = 0.6) +
+      theme_minimal() +
+      geom_hline(yintercept = mean(Y), linetype="dashed", color = "red", alpha = 0.3, size = 1) +
+      geom_vline(xintercept = mean(X), linetype="dashed", color = "red", alpha = 0.3, size = 1) 
+
+p
+```
+
+```{r}
+# Scatter plot of `Y` and `X`
+p +
+  geom_abline(intercept = 0, slope = 1, color = "black", size = 1.5, alpha = 0.6)
+```
+
+```{r}
+# Scatter plot of `Y` and `X`
+p +
+  geom_abline(intercept = 5, slope = 1, color = "black", size = 1.5, alpha = 0.6)
+```
+
+```{r}
+# Scatter plot of `Y` and `X`
+p +
+  geom_abline(intercept = 0, slope = 3, color = "black", size = 1.5, alpha = 0.6)
+```
+
+```{r}
+# Scatter plot of `Y` and `X`
+p +
+  geom_abline(intercept = 5, slope = 2, color = "black", size = 1.5, alpha = 0.6)
+```
+
+```{r}
+# Scatter plot of `Y` and `X`
+p +
+  geom_abline(intercept = 5, slope = 2, color = "green", size = 5, alpha = 0.3) +
+  geom_abline(intercept = beta0, slope = beta1, color = "red", size = 2, alpha = 0.8)
+```
+
+## Estimating Coefficients
+
+The ordinary least squares (OLS) estimator finds regression coefficients that minimize the sum of squared errors in predicting $Y$ given $X$.
+
+The true data-generating process:
+$$ Y = \beta_0 + \beta_1 \cdot X + \varepsilon \, .$$
+
+The estimated data-generating process conditional on observations of $X$:
+$$ Y = b_0 + b_1 \cdot X + e \, .$$
+
+$b_0$ is an estimate of $\beta_0$, and $b_1$ is an estimate of $\beta_1$. 
+
+OLS computes $b_0$ and $b_1$ such that $\sum_{i=1}^N e_i^2 = \sum_{i=1}^N (y_i - b_0 - b_1 \cdot x_i)^2$ is minimized.
+
+You can think of $\sum_{i=1}^N e_i^2$ as a measure of closeness between the fitted line (implicitly generated using OLS through the estimation of regression coefficients) and the data.
+
+The red line in the following graph is a regression line:
+
+```{r}
+p +
+  geom_smooth(method = "lm", se = FALSE, color = "red", size = 1.5, alpha = 0.6)
+```
+
+The OLS estimators of $\beta_0$ and $\beta_1$ are the following:
+
+$$ b_0 = \overline{Y} - b_1 \overline{X} $$
+
+$$ b_1 = \frac{\sum_{i=1}^N (X_i - \overline{X}) (Y_i - \overline{Y}) }{\sum_{i=1}^N (X_i - \overline{X})^2} $$
+Let's compute these manually:
+
+```{r}
+b1 <- sum((X - mean(X)) * (Y - mean(Y))) / sum((X - mean(X))^2)
+b0 <- mean(Y) - b1 * mean(X) 
+print(b0)
+print(b1) 
+```
+
+```{r}
+mod <- lm(formula = Y ~ X, data = data_df)
+mod
+```
+
+```{r}
+modelsummary(mod)
+```
+## Hypothesis Testing 
+
+Within the context of regression modeling, a hypothesis test is a rule that specifies whether to accept or reject a claim about a population parameter ($\beta_0$, $\beta_1$). 
+
+There must be two opposing hypotheses:
+
+- $H_0$: null hypothesis ($\beta_i = \beta_{i,0}$)
+- $H_1$: alternative hypothesis ($\beta_i \neq \beta_{i,0}$)
+
+The coefficient estimates and standard errors generated using OLS provide us with sufficient evidence to perform hypothesis tests on the true values of $\beta_0$ and $\beta_1$. 
+
+Using the fact that the estimates $b_0$ and $b_1$ are approximately normally distributed in large samples, testing hypotheses about the true values of $\beta_0$ and $\beta_1$ can be performed using $t$-statistics:
+
+$$ t = \frac{\text{estimated value} - \text{hypothesized value}}{\text{standard error of the estimator}} = \frac{b_i - \beta_{i,0}}{SE(b_i)} \, .$$
+
+Given a two-sided alternative hypothesis, we reject at the 5$\%$ level if $t > 1.96$ ($p$-value is less than 0.05). 
+
+```{r}
+mod_summ <- summary(mod)
+mod_summ 
+```
+
+```{r}
+mod_summ$coefficients
+```
+
+Let's test the following hypothesis:
+
+- $H_0$: $\beta_1 = 3$ 
+- $H_1$: $\beta_1 \neq 3$ 
+
+```{r}
+```
