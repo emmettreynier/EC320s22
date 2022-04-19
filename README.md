@@ -17,6 +17,10 @@ The HTML versions of the lecture slides allow you to view animations and interac
 5. **Logic of Regression** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/05-regression/05-Regression.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/05-regression/05-Regression.pdf)  
 6. **Simple Linear Regression 1** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/06-simple-reg-i/06-Simple_Linear_Regression_Estimation_I.html) | [.pdf](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/06-simple-reg-i/06-Simple_Linear_Regression_Estimation_I.html)  
 
+7. **Simple Linear Regression 2** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/07-simple-reg-ii/07-Simple_Linear_Regression_Estimation_II.html) | [.pdf](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/07-simple-reg-ii/07-Simple_Linear_Regression_Estimation_II.html)  
+
+
+
 ## Labs
 
 Each bullet point represents a given week.
