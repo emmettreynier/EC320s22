@@ -131,7 +131,7 @@ gapminder %>%
   summarize(avgLifeExp = mean(lifeExp))
 ```
 
-What was the total GDP of the world in 1997 (in 1000s of USD)?
+What was the total GDP of the world in 1997 (in billions of USD)?
 
 ```{r}
 gapminder %>%
@@ -176,7 +176,7 @@ and produce summary statistics for each partition of the data.
 
 Let's see `group_by()` in action by answering some questions about the `gapminder` data.
 
-What is the total GDP of each continent in the year 1997?
+What is the total GDP (in billions of USD) of each continent in the year 1997?
 
 ```{r}
 gapminder %>%
@@ -187,7 +187,7 @@ gapminder %>%
             totGDP = sum(gdp)/(10^9)) 
 ```
 
-What is the total world GDP in each year of the sample?
+What is the total world GDP (in billions of USD) in each year of the sample?
 
 ```{r}
 gapminder %>%
@@ -197,11 +197,10 @@ gapminder %>%
             totGDP = sum(gdp)/(10^9)) 
 ```
 
-What is the total GDP of each continent in each year of the sample?
+What is the total GDP (in billions of USD) of each continent in each year of the sample?
 
 ```{r}
 gapminder %>%
-  filter(year == 1997) %>%
   group_by(continent, year) %>%                 # 
   mutate(gdp = pop * gdpPercap) %>%
   summarize(avgLifeExp = mean(lifeExp),
