@@ -70,13 +70,18 @@ Let's simulate some data on the following random variables:
 
 $X$ is a normally-distributed random variable with $E(X) = 5$ and $Var(X) = 9$.
 
-$Y$ is a normally-distributed random variable with 
+It might also be useful to see that $Y$ is a normally-distributed random variable with 
 $$E(Y) \\ = E(5 + 2 X + u) \\ = 5 + 2 E(X) + E(u) \\ = 5 + 2 (5) + (0) \\ = 15 \, , $$ 
 and 
 $$Var(Y) \\ = Var(5 + 2 X + u) \\ = Var(5) + Var(2 X) + Var(u) \\ = (0) + 2^2 Var(X) + Var(u) \\ = 4 (9) + (1) \\ = 37 \, .$$
 In other words, $Y \sim N(15, 37)$.
 
-$Y$ is a function of $X$ and some noise $u$.
+**Important:** $Y$ is a function of $X$ and some (unobservable) noise $u$.
+So, a portion of the variation in $Y$ is a reflection of the variation in $X$. 
+
+If we have some data on (observations of) $Y$ and $X$, then we can run a regression to estimate approximately how much variation in $Y$ is caused by $X$, and what the nature of the relationship between these two variables is.
+
+Let's simulate some data from this data-generating process, and group the observables ($Y$ and $X$) into a single dataset.
 
 ```{r}
 # Number of observations 
@@ -100,6 +105,8 @@ Y <- beta0 + beta1 * X + u
 data_df <- tibble(Y, X)
 ```
 
+Let's make histograms of the observations of $u$, $X$, and $Y$ (although, let's not forget that we're assuming $u$ is unobservable!):
+
 ```{r}
 # Plot histogram of `u`
 ggplot(data_df, aes(u)) +
@@ -120,6 +127,12 @@ ggplot(data_df, aes(Y)) +
   theme_minimal()
 ```
 
+The samples seem to match our specified data-generating process.
+
+Let's explore a bit further by creating a bunch of scatter plots.
+
+First we create a scatter plot of $u$ and $X$ (once again, recall that $u$ is assumed to be unobservable -- in reality we wouldn't be able to create this plot):
+
 ```{r}
 # Scatter plot of `X` and `u`
 ggplot(data_df, aes(x = u, y = X)) +
@@ -129,6 +142,8 @@ ggplot(data_df, aes(x = u, y = X)) +
   geom_vline(xintercept = mean(u), linetype="dashed", color = "red", alpha = 0.5, size = 1) 
 ```
 
+Next, we plot $u$ and $Y$:
+
 ```{r}
 # Scatter plot of `Y` and `u`
 ggplot(data_df, aes(x = u, y = Y)) +
@@ -137,6 +152,8 @@ ggplot(data_df, aes(x = u, y = Y)) +
   geom_hline(yintercept = mean(Y), linetype="dashed", color = "red", alpha = 0.5, size = 1) +
   geom_vline(xintercept = mean(u), linetype="dashed", color = "red", alpha = 0.5, size = 1) 
 ```
+
+Lastly, we plot the observations on the two observable variables in our sample, $X$ and $Y$: 
 
 ```{r}
 # Scatter plot of `Y` and `X`
@@ -149,11 +166,27 @@ p = ggplot(data_df, aes(x = X, y = Y)) +
 p
 ```
 
+Notice that unlike the previous plots, this one shows an unmistakable positive relationship between $Y$ and $X$ -- when $X$ is high, $Y$ tends to be high, and when $X$ is low so is $Y$. 
+
+A linear regression model essentially represents a line that captures the average relationship between $Y$ and $X$.
+
+Recall the formula for a line representing the relationship between some variables $y$ and $x$: $y = f(x) = a + b x$. 
+
+Here $a$ is the intercept coefficient, and $b$ is the slope coefficient. 
+
+Let's try to eyeball a best-fit line to the given data. 
+
+We start by guessing $a = 0$ and $b = 1$:
+
 ```{r}
 # Scatter plot of `Y` and `X`
 p +
-  geom_abline(intercept = 0, slope = 1, color = "black", size = 1.5, alpha = 0.6)
+  geom_abline(intercept = 0, slope = 1, color = "black", size = 1.5, alpha = 0.6) # Plot line w/ a = 0, b = 1
 ```
+
+Clearly the above line is not the line of best-fit.
+
+What if we shift it up a little bit by setting $a = 5$ intead of $a = 0$:
 
 ```{r}
 # Scatter plot of `Y` and `X`
@@ -161,11 +194,17 @@ p +
   geom_abline(intercept = 5, slope = 1, color = "black", size = 1.5, alpha = 0.6)
 ```
 
+The above is better, but far from perfect.
+
+Now why don't we keep $a = 5$ and change $b$ from $1$ to $3$: 
+
 ```{r}
 # Scatter plot of `Y` and `X`
 p +
-  geom_abline(intercept = 0, slope = 3, color = "black", size = 1.5, alpha = 0.6)
+  geom_abline(intercept = 5, slope = 3, color = "black", size = 1.5, alpha = 0.6)
 ```
+
+Clearly, the slope of the best-fit line seems to be between $1$ and $3$, so let's try $2$:
 
 ```{r}
 # Scatter plot of `Y` and `X`
@@ -173,12 +212,24 @@ p +
   geom_abline(intercept = 5, slope = 2, color = "black", size = 1.5, alpha = 0.6)
 ```
 
+Great -- the line of best-fit *must* look something similar to the above. 
+
+Now let's plot the above line along with a line with $a = \beta_0$ and $b = \beta_1$ -- in other words, we set the line coefficients equal to the population regression coefficients $\beta_0$ and $\beta_1$ from the actual data-generating process.
+
 ```{r}
 # Scatter plot of `Y` and `X`
 p +
   geom_abline(intercept = 5, slope = 2, color = "green", size = 5, alpha = 0.3) +
   geom_abline(intercept = beta0, slope = beta1, color = "red", size = 2, alpha = 0.8)
 ```
+
+These two lines overlap perfectly.
+
+Why? Because we've set $a = \beta_0 = 5$ and $b = \beta_1 = 2$. 
+
+In other words, we've successfully recovered the population coefficients parameters by eyeballing the line of best fit to the data.
+
+Of course, it isn't always so easy, so we want to have a statistically sound method of carrying out the above process without ever eyeballing any of the true model parameters. 
 
 ## Estimating Coefficients
 
@@ -217,14 +268,34 @@ print(b0)
 print(b1) 
 ```
 
+Luckily, the `lm()` function allows us to run OLS and estimate linear regression coefficients, as well as generate standard errors for each of the coefficient estimates:
+
 ```{r}
 mod <- lm(formula = Y ~ X, data = data_df)
 mod
 ```
 
+The `lm()` function has two necessary inputs: `data` and `formula`. 
+
+- `data` refers to the dataset containing our variables of interest;
+- `formula` specifies the actual regression model. `Y ~ X` is equivalent to specifying $Y = \beta_0 + \beta_1 X + \varepsilon$. 
+
+Notice that we've saved our model estimates as an object called `mod`.
+
+When we print `mod`, we see the regression coefficient estimates, but not much else. 
+
+A great way of printing the full relevant set of information associated with estimating a regression model is the `modelsummary()` function.
+
+We simply give the `mod` object as in input to `modelsummary()`, and it spits out a nice-looking table.
+
 ```{r}
 modelsummary(mod)
 ```
+
+You should use `modelsummary()` to present your model estimates to a reader -- all other formats are too messy.
+
+`modelsummary()` is what academics use to present their results in peer-reviewed papers! You should follow their lead.
+
 ## Hypothesis Testing 
 
 Within the context of regression modeling, a hypothesis test is a rule that specifies whether to accept or reject a claim about a population parameter ($\beta_0$, $\beta_1$). 
@@ -242,19 +313,56 @@ $$ t = \frac{\text{estimated value} - \text{hypothesized value}}{\text{standard 
 
 Given a two-sided alternative hypothesis, we reject at the 5$\%$ level if $t > 1.96$ ($p$-value is less than 0.05). 
 
+We may retreive all information relevant for hypothesis tests from a regression output using the `summary()` function.
+
+In the following code chunk, we give the `mod` object (containing the regression output from regressing $Y$ on $X$) to the `summary()` function, and save the output as `mod_summ`. 
+
 ```{r}
 mod_summ <- summary(mod)
 mod_summ 
 ```
 
+Notice that the above object has the following "fields": 
+
+- Call 
+- Residuals
+- Coefficients
+- Signif. codes
+- Residual standard error
+- Multiple R-squared
+- F-statistics
+
+The one we care about is "Coefficients" (retrievable as `coefficients`): 
+
 ```{r}
-mod_summ$coefficients
+coefs <- mod_summ$coefficients
+coefs 
 ```
 
-Let's test the following hypothesis:
+Using this information, let's test the following hypothesis:
 
 - $H_0$: $\beta_1 = 3$ 
 - $H_1$: $\beta_1 \neq 3$ 
 
 ```{r}
+# Specify hypothesized value of beta1
+h0_beta1      = 3
+
+# Retrieve estimated value of beta1
+est_beta1     = coefs[2,1] # 2nd row (X), 1st column (Estimate)
+
+# Retrieve standard error of beta1 estimate
+std_err_beta1 = coefs[2,2] # 2nd row (X), 2nd column (Std. Error) 
+
+# Compute t-statistic of the test
+t_stat        = (h0_beta1 - est_beta1) / std_err_beta1
+
+# Print the computed t-statistic 
+t_stat 
 ```
+
+This is a very high t-statistic! 
+
+Recall that given a two-sided alternative hypothesis, we reject at the 5$\%$ level if $t > 1.96$ ($p$-value is less than 0.05). 
+
+Therefore, we may reject the null hypothesis at (at least) a 5$\%$ level of confidence. 
