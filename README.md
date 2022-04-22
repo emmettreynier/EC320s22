@@ -22,7 +22,7 @@ The HTML versions of the lecture slides allow you to view animations and interac
 
 7. **Simple Linear Regression 2** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/07-simple-reg-ii/07-Simple_Linear_Regression_Estimation_II.html) | [.pdf](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/07-simple-reg-ii/07-Simple_Linear_Regression_Estimation_II.pdf)  
 
-8. **Classical Assumptions** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/08-classic-assumptions/08-Classic_Assumptions.html) | [.pdf](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/08-classic-assumptions/08-Classic_Assumptions.html)  
+8. **Classical Assumptions** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/08-classic-assumptions/08-Classical_Assumptions.html) | [.pdf](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/08-classic-assumptions/08-Classical_Assumptions.html)  
 
 
 
