@@ -1,0 +1,59 @@
+---
+title: "EC320 Midterm Study Guide"
+date: "Spring 2022"
+output: 
+  html_document:
+    theme: flatly
+---
+
+I will pull from the following topics for the midterm.  
+
+## Statistics Review  
+#### Reading: ITE Review Chapter   
+- Summation Rules  
+- Random Variables and PDF’s (Discrete and Continuous)  
+- Expected Value  
+- Variance, Standard deviation, covariance, correlation  
+- Normalizing variables  
+- Population vs Sample  
+- Estimators  
+- Unbiasedness  
+- Efficiency  
+- Bias variance tradeoff  
+- Normal distribution  
+- Hypothesis testing   
+- Types of data   
+
+    
+## Fundamental Problem of Econometrics  
+#### Reading: MM Chapter 1  
+- Potential outcomes  
+- Ideal comparison and fundamental problem   
+- Difference in means = ATE + Selection Bias  
+- Randomization (RCT’s and natural experiments)   
+    
+## Logic of Regression  
+#### Reading: MM Chapter 2  
+- The regression model  
+- Population parameters and error term  
+- Estimated parameters and residuals  
+- Fitted values  
+- Confounding variables  
+- OVB  
+    
+## Regression Estimation  
+#### Reading: ITE Chapter 1  
+- Interpretation of paramters  
+- Residual sum of squares   
+- OLS estimator  
+- Slope and intercept formulas  
+- Properties of OLS  
+- Goodness of Fit (R-squared)  
+- TSS, ESS, and RSS  
+- Units of measurement  
+    
+## Regression Assumptions  
+#### Reading: ITE Chapter 2.1-2.2  
+- Assumptions A1-A6  
+- Assumptions needed for unbiasedness  
+- Variance of OLS estimates  
