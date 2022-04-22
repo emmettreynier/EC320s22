@@ -18,11 +18,11 @@ The HTML versions of the lecture slides allow you to view animations and interac
 
 5. **Logic of Regression** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/05-regression/05-Regression.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/05-regression/05-Regression.pdf)  
 
-6. **Simple Linear Regression 1** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/06-simple-reg-i/06-Simple_Linear_Regression_Estimation_I.html) | [.pdf](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/06-simple-reg-i/06-Simple_Linear_Regression_Estimation_I.pdf)  
+6. **Simple Linear Regression 1** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/06-simple-reg-i/06-Simple_Linear_Regression_Estimation_I.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/06-simple-reg-i/06-Simple_Linear_Regression_Estimation_I.pdf)  
 
-7. **Simple Linear Regression 2** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/07-simple-reg-ii/07-Simple_Linear_Regression_Estimation_II.html) | [.pdf](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/07-simple-reg-ii/07-Simple_Linear_Regression_Estimation_II.pdf)  
+7. **Simple Linear Regression 2** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/07-simple-reg-ii/07-Simple_Linear_Regression_Estimation_II.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/07-simple-reg-ii/07-Simple_Linear_Regression_Estimation_II.pdf)  
 
-8. **Classical Assumptions** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/08-classic-assumptions/08-Classical_Assumptions.html) | [.pdf](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/08-classic-assumptions/08-Classical_Assumptions.html)  
+8. **Classical Assumptions** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/08-classic-assumptions/08-Classical_Assumptions.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/08-classic-assumptions/08-Classical_Assumptions.pdf)  
 
 
 
