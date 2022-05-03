@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Midterm Review</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Emmett Saulnier" />
+    <script src="midterm-review_files/header-attrs/header-attrs.js"></script>
+    <link href="midterm-review_files/remark-css/default.css" rel="stylesheet" />
+    <link href="midterm-review_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="midterm-review_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Midterm Review
+## EC 320: Introduction to Econometrics
+### Emmett Saulnier
+### Spring 2022
+
+---
+
+class: inverse, middle
+
+
+
+# Prologue
+
+---
+
+# Housekeeping
+
+### Midterm Thursday (4/28)     
+  - 5 multiple choice, 5 true/false, and 5 short answer questions  
+    - 5 points each for multiple choice and true/false   
+    - 10 points each for short answer questions (each one has multiple parts)   
+  - Study materials...
+    1. The lecture slides and your notes  
+    2. Homework problems
+    3. Textbook reading:  
+  .hi-pink[ITE] Chapters Review, 1, and 2.1-2  
+  .hi-green[MM] Chapters 1 and 2  
+  - Bring a calculator if you have one (I will have extras, but not 60)  
+  - Review session in Lab tomorrow, come with questions!  
+
+---
+class: inverse, middle  
+
+# Statistical Review
+
+---
+# Summation and Expectation Rules  
+
+If `\(\{(x_i, y_i): 1, \dots, n \}\)` is a set of `\(n\)` pairs, and `\(a\)` and `\(b\)` are constants, then `$$\sum_{i=1}^{n} (ax_i + by_i) = a \sum_{i=1}^{n} x_i + b \sum_{i=1}^{n} y_i.$$`
+
+If `\(\{a_1, a_2, \dots , a_n\}\)` are constants and `\(\{X_1, X_2, \dots , X_n\}\)` are random variables, then
+
+$$
+\color{#FD5F00}{\mathop{\mathbb{E}}(a_1 X_1 + a_2 X_2 + \dots + a_n X_n)} = \color{#007935}{a_1 \mathop{\mathbb{E}}(X_1) + a_2 \mathop{\mathbb{E}}(X_2) + \dots + a_n \mathop{\mathbb{E}}(X_n)}.
+$$
+
+---
+# Variance and Covariance Rules  
+
+For constants `\(a\)`, `\(b\)`, `\(c\)`, and `\(d\)`
+
+$$
+\mathop{\text{Var}} (aX + bY + d) = a^2 \mathop{\text{Var}}(X) + b^2 \mathop{\text{Var}}(Y) + 2ab\mathop{\text{Cov}}(X, Y).
+$$
+Similarly, we have the following covariance rule
+
+$$
+\mathop{\text{Cov}}(aX + b, cY + d) = ac\mathop{\text{Cov}}(X, Y)
+$$
+
+---
+# Population *vs.* Sample
+
+**Question:** Why do we care about *population vs. sample*?
+
+
+
+.pull-left[
+
+&lt;img src="midterm-review_files/figure-html/pop1-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[**Population**]
+
+]
+
+--
+
+.pull-right[
+
+&lt;img src="midterm-review_files/figure-html/mean1-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[**Population relationship**]
+&lt;br&gt;
+`\(\mu = 3.75\)`
+
+]
+
+---
+# Population *vs.* Sample
+
+**Question:** Why do we care about *population vs. sample*?
+
+.pull-left[
+
+&lt;img src="midterm-review_files/figure-html/sample1-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[**Sample 1:** 10 random individuals]
+
+]
+
+--
+
+.pull-right[
+
+&lt;img src="midterm-review_files/figure-html/sample1 mean-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[
+
+**Population relationship**
+&lt;br&gt;
+`\(\mu = 3.75\)`
+
+**Sample relationship**
+&lt;br&gt;
+`\(\hat{\mu} = 8.34\)`
+
+]
+
+]
+
+---
+# Population *vs.* Sample
+
+**Question:** Why do we care about *population vs. sample*?
+
+.pull-left[
+
+&lt;img src="midterm-review_files/figure-html/sample2-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[**Sample 2:** 10 random individuals]
+
+]
+
+--
+
+.pull-right[
+
+&lt;img src="midterm-review_files/figure-html/sample2 mean-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[
+
+**Population relationship**
+&lt;br&gt;
+`\(\mu = 3.75\)`
+
+**Sample relationship**
+&lt;br&gt;
+`\(\hat{\mu} = -8.54\)`
+
+]
+
+]
+
+
+---
+# Properties of Estimators
+
+**Question:** What properties make an estimator reliable?
+
+**Answer 1: Unbiasedness.**
+
+.pull-left[
+
+**Unbiased estimator:** `\(\mathop{\mathbb{E}}\left[ \hat{\mu} \right] = \mu\)`
+
+&lt;img src="midterm-review_files/figure-html/unbiased pdf-1.svg" style="display: block; margin: auto;" /&gt;
+
+]
+
+--
+
+.pull-right[
+
+**Biased estimator:** `\(\mathop{\mathbb{E}}\left[ \hat{\mu} \right] \neq \mu\)`
+
+&lt;img src="midterm-review_files/figure-html/biased pdf-1.svg" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+# Properties of Estimators
+
+**Question:** What properties make an estimator reliable?
+
+**Answer 2: Low Variance (a.k.a. Efficiency).**
+
+&lt;img src="midterm-review_files/figure-html/variance pdf-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Hypothesis Testing
+
+Reject H.sub[0] if `\(\left| z \right| =\left| \dfrac{\hat{\mu} - \mu_0}{\mathop{\text{sd}}(\hat{\mu})} \right| &gt; z_{crit}\)`. Where `\(z_{crit}\)` comes from the normal distribution and the significance of the test you would like to run. 
+
+&lt;img src="midterm-review_files/figure-html/unnamed-chunk-1-1.svg" style="display: block; margin: auto;" /&gt;
+
+If you observe an extreme value in the data relative to the **assumed** null distribution, then the null hypothesis is probably not correct! 
+
+
+---
+class: inverse, middle  
+
+# Fundamental Problem of Econometrics 
+
+
+---
+# Fundamental Problem of Econometrics
+
+## Ideal comparison
+$$
+`\begin{align}
+  \tau_i = \color{#EC7662}{y_{1,i}} &amp;- \color{#9370DB}{y_{0,i}}
+\end{align}`
+$$
+
+Highlights the fundamental problem of econometrics, much like when a traveller assesses options down two separate roads.
+
+--
+
+## The problem
+
+- If we observe `\(\color{#EC7662}{y_{1,i}}\)`, then we cannot observe `\(\color{#9370DB}{y_{0,i}}\)`.
+
+- If we observe `\(\color{#9370DB}{y_{0,i}}\)`, then we cannot observe `\(\color{#EC7662}{y_{1,i}}\)`.
+
+- Can only observe what actually happened; cannot observe the **counterfactual**.
+
+---
+# Solutions to the fundamental problem  
+
+A dataset that we can observe for 10 people looks something like
+.pull-left[
+
+```
+#&gt;     i trt  y1i  y0i
+#&gt; 1   1   1 5.01   NA
+#&gt; 2   2   1 8.85   NA
+#&gt; 3   3   1 6.31   NA
+#&gt; 4   4   1 5.97   NA
+#&gt; 5   5   1 7.61   NA
+#&gt; 6   6   0   NA 4.15
+#&gt; 7   7   0   NA 0.56
+#&gt; 8   8   0   NA 3.52
+#&gt; 9   9   0   NA 4.49
+#&gt; 10 10   0   NA 1.40
+```
+]
+
+--
+
+.pull-right[
+We can't observe `\(\color{#EC7662}{y_{1,i}}\)` and `\(\color{#9370DB}{y_{0,i}}\)`.
+
+But, we do observe
+- `\(\color{#EC7662}{y_{1,i}}\)` for `\(i\)` in 1, 2, 3, 4, 5
+- `\(\color{#9370DB}{y_{0,i}}\)` for `\(i\)` in 6, 7, 8, 9, 10
+
+]
+
+--
+
+We "fill in" the `NA`s and estimate `\(\overline{\tau}\)` using **RCT**'s, natural experiments, or controlling for selection bias.  
+
+---
+class: inverse, middle  
+
+# Regression
+
+---
+# The Regression Model
+
+We can estimate the effect of `\(X\)` on `\(Y\)` by estimating a .hi[regression model]:
+
+`$$Y_i = \beta_0 + \beta_1 X_i + u_i$$`
+
+- `\(Y_i\)` is the outcome variable.
+
+--
+
+- `\(X_i\)` is the treatment variable (continuous).
+
+--
+
+- `\(\beta_0\)` is the **intercept** parameter. `\(\mathop{\mathbb{E}}\left[ {Y_i | X_i=0} \right] = \beta_0\)`
+
+--
+
+- `\(\beta_1\)` is the **slope** parameter, which under the correct causal setting represents marginal change in `\(X_i\)`'s effect on `\(Y_i\)`. `\(\frac{\partial Y_i}{\partial X_i} = \beta_1\)`
+
+
+--
+
+- `\(u_i\)` is an error (disturbance) term that includes all other (omitted) factors affecting `\(Y_i\)`.
+
+---
+# OLS
+
+&lt;br&gt;
+
+The __OLS estimator__ chooses the parameters `\(\hat{\beta_1}\)` and `\(\hat{\beta_2}\)` that minimize the .hi[residual sum of squares (RSS)]:
+
+`$$\min_{\hat{\beta}_1,\, \hat{\beta}_2} \quad \color{#EC7662}{\sum_{i=1}^n \hat{u}_i^2}$$`
+
+Where `\(\hat{u}_i = y_i - \hat{y}_i\)` for fitted values `\(\hat{y}_i = \hat{\beta}_1 + \hat{\beta}_2x_i\)`. Thus, the problem becomes
+
+`$$\min_{\hat{\beta}_1,\, \hat{\beta}_2} \quad \color{#EC7662}{\sum_{i=1}^n (y_i - \hat{\beta}_1 - \hat{\beta}_2x_i)^2}$$`
+
+---
+# OLS Formulas
+
+&lt;br&gt;
+
+For details, see the [handout](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/06-simple-reg-1/Handout-01.pdf) posted on Canvas.
+
+__Slope coefficient__
+
+`$$\hat{\beta}_2 = \dfrac{\sum_{i=1}^n (Y_i - \bar{Y})(X_i - \bar{X})}{\sum_{i=1}^n  (X_i - \bar{X})^2}$$`
+
+__Intercept__
+
+$$ \hat{\beta}_1 = \bar{Y} - \hat{\beta}_2 \bar{X} $$
+
+---
+# OLS Properties
+
+&lt;br&gt;
+
+The way we selected OLS estimates `\(\hat{\beta}_1\)` and `\(\hat{\beta}_2\)` gives us three important properties:
+
+1. Residuals sum to zero: `\(\sum_{i=1}^n \hat{u}_i = 0\)`.
+
+2. The sample covariance between the independent variable and the residuals is zero: `\(\sum_{i=1}^n X_i \hat{u}_i = 0\)`.
+
+3. The point `\((\bar{X}, \bar{Y})\)` is always on the regression line.
+
+---
+# Goodness of Fit
+
+What percentage of the variation in our `\(Y_i\)` is *apparently* explained by our model? The `\(R^2\)` term represents this percentage.
+
+Total variation is represented by .hi-blue[TSS] and our model is capturing the 'explained' sum of squares, .hi-blue[ESS].
+
+Taking a simple ratio reveals how much variation our model explains. 
+
+- `\(R^2 = \frac{\text{ESS}}{\text{TSS}}\)` varies between 0 and 1
+
+- `\(R^2 = 1 - \frac{\text{RSS}}{\text{TSS}}\)`, 100% less the unexplained variation 
+
+
+
+---
+class: inverse, middle  
+
+# Classical Assumptions  
+
+---
+# Classical Assumptions of OLS
+
+1. **Linearity:** The population relationship is .hi[linear in parameters] with an additive error term.
+
+--
+
+2. **Sample Variation:** There is variation in `\(X\)`.
+
+--
+
+3. **Exogeneity:** The `\(X\)` variable is .hi[exogenous] (*i.e.,* `\(\mathop{\mathbb{E}}\left( u|X \right) = 0\)`).&lt;sup&gt;.pink[†]&lt;/sup&gt;
+
+--
+
+4. **Homoskedasticity:** The error term has the same variance for each value of the independent variable (*i.e.,* `\(\mathop{\text{Var}}(u|X) = \sigma^2\)`).
+
+--
+
+5. **Non-autocorrelation:** The values of error terms have independent distributions (*i.e.,* `\(E[u_i u_j]=0, \forall i \text{ s.t. } i \neq j\)`)
+
+--
+
+6. **Normality:** The population error term is normally distributed with mean zero and variance `\(\sigma^2\)` (*i.e.,* `\(u \sim N(0,\sigma^2)\)`)
+
+.footnote[
+.pink[†] Implies assumption of **Random Sampling:** We have a random sample from the population of interest.
+]
+
+---
+# When is OLS Unbiased?
+
+## Required Assumptions
+
+1. **Linearity:** The population relationship is .hi[linear in parameters] with an additive error term.
+
+2. **Sample Variation:** There is variation in `\(X\)`.
+
+3. **Exogeneity:** The `\(X\)` variable is .hi[exogenous] (*i.e.,* `\(\mathop{\mathbb{E}}\left( u|X \right) = 0\)`).
+
+--
+
+&amp;#9755; (3) implies **Random Sampling**. Without, the internal validity of OLS uncompromised, but our external validity becomes uncertain.&lt;sup&gt;.pink[†]&lt;/sup&gt;
+
+.footnote[
+.pink[†] **Internal Validity:** relates to how well a study is conducted (does it satisfy OLS assumptions?).&lt;br&gt; **External Validity:** relates to how applicable the findings are to the real world.
+]
+
+---
+# Exogeneity (A3.)
+
+## Assumption
+
+The `\(X\)` variable is __exogenous:__ `\(\mathop{\mathbb{E}}\left( u|X \right) = 0\)`.
+
+- For _any_ value of `\(X\)`, the mean of the error term is zero.
+
+.hi[The most important assumption!]
+
+--
+
+Really two assumptions bundled into one:
+
+1. On average, the error term is zero: `\(\mathop{\mathbb{E}}\left(u\right) = 0\)`.
+
+2. The mean of the error term is the same for each value of `\(X\)`: `\(\mathop{\mathbb{E}}\left( u|X \right) = \mathop{\mathbb{E}}\left(u\right)\)`.
+
+---
+# Exogeneity (A3.)
+
+## Assumption
+
+The `\(X\)` variable is __exogenous:__ `\(\mathop{\mathbb{E}}\left( u|X \right) = 0\)`.
+
+- The assignment of `\(X\)` is effectively random.
+- **Implication:** .hi-purple[no selection bias] and .hi-green[no omitted-variable bias].
+
+
+---
+exclude: true
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
