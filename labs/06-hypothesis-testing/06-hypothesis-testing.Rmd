@@ -62,7 +62,7 @@ Take a look at the first few observations of the `gapminder` dataset:
 head(gapminder)
 ```
 
-Normalize the `pop`, `lifeExp`, and `gdpPercap` variables in `gapminder` **by year**, and store the resulting data farme in an object called `data_df`:
+Standardize the `pop`, `lifeExp`, and `gdpPercap` variables in `gapminder` **by year**, and store the resulting data farme in an object called `data_df`:
 
 ```{r}
 data_df <- gapminder |>
@@ -123,21 +123,22 @@ ggplot(data97_df %>% filter(abs(pop) <= 3), aes(x = pop, y = lifeExp)) +
   geom_point()
 ```
 
-Is there any kind of clear relationship `pop` and `lifeExp`?
+Is there any kind of clear relationship between `pop` and `lifeExp`?
 
 Now let's plot the cross-sectional relationship between `pop` and `gdpPercap` to see if there's any evidence for an interesting relationship.
 Exclude the `pop` outliers once again, but also exclude `gdpPercap` outliers.
 
 
 ```{r}
-ggplot(data57_df %>% filter(abs(pop) <= 3, abs(gdpPercap) <= 3), aes(x = pop, y = gdpPercap)) +
+ggplot(data57_df %>% filter(pop <= 3, gdpPercap <= 3), aes(x = pop, y = gdpPercap)) +
   geom_point()
 
 
-ggplot(data97_df %>% filter(abs(pop) <= 3, abs(gdpPercap) <= 3), aes(x = pop, y = gdpPercap)) +
+ggplot(data97_df %>% filter(pop <= 3, gdpPercap <= 3), aes(x = pop, y = gdpPercap)) +
   geom_point()
 ```
-Is there any kind of clear relationship `pop` and `gdpPercap`?
+
+Is there any kind of clear relationship between `pop` and `gdpPercap`?
 
 Finally, let's plot the relationship between `lifeExp` and `gdpPercap` in 1957 and 1997, respectively, without excluding any outliers.
 
@@ -156,7 +157,7 @@ Draw a line of best fit through the data in both plots.
 Remove the outlier in the 1957 plot.
 
 ```{r}
-ggplot(data57_df %>% filter(abs(gdpPercap) < 3), aes(x = gdpPercap, y = lifeExp)) +
+ggplot(data57_df %>% filter(gdpPercap < 3), aes(x = gdpPercap, y = lifeExp)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE, color = "red")
 
