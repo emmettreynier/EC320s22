@@ -24,7 +24,9 @@ The HTML versions of the lecture slides allow you to view animations and interac
 
 8. **Classical Assumptions** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/08-classic-assumptions/08-Classical_Assumptions.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/08-classic-assumptions/08-Classical_Assumptions.pdf)  
 
+9. **Inference** [.html](https://rawcdn.githack.com/emmettsaulnier/EC320s22/07586594875d320f32e5fe3625aca1e484e76456/lectures/09-simple-reg-iii/09-Simple_LR_Inference.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/09-simple-reg-iii/09-Simple_LR_Inference.pdf)  
 
+10. **Multiple Regression Estimation** [.html](https://rawcdn.githack.com/emmettsaulnier/EC320s22/07586594875d320f32e5fe3625aca1e484e76456/lectures/10-multiple-reg-i/10-Multiple_LR_est.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/10-multiple-reg-i/10-Multiple_LR_est.pdf)  
 
 ## Labs
 
