@@ -1,0 +1,288 @@
+---
+title: "**Hypothesis Testing**"
+author: |
+        | Giorgi Nikolaishvili
+        | EC 320: Introduction to Econometrics
+        | University of Oregon
+date: "Spring 2022"
+output: 
+  html_document:
+    theme: flatly  
+    includes:
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+      
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F, cache = T)
+```
+
+## Recap
+
+Common workflow:
+
+- Load `pacman` package, then use `p_load()` to install+load packages
+- Gather tidy data into a data frame or tibble
+- **Data manipulation:**
+  - Select subsets of variables using `select()`
+  - Filter observations using `filter()` 
+  - Edit existing variables or create new ones using `mutate()`
+  - Order observations using `arrange()`
+  - Slice data using `group_by()`
+  - Summarize data using `summarize()` 
+  - Use the pipe operator `%>%` (available through `tidyverse`) or `|>` (available through base R)!
+- Plot data using tools provided by the `ggplot2` package
+- Estimate linear regression models using `lm()` 
+- Present output using `modelsummary()` (available through the `modelsummary` package)
+- Retrieve coefficient estimates, standard errors, etc. using `summary()`
+
+Today we will draw upon many of the items in the above list, as we work through a regression analysis project together in a fresh .Rmd file.
+
+## Load Packages 
+
+Load the following packages:
+
+- `tidyverse` -- this will be used for data manipulation, plotting, etc.
+- `gapminder` -- provides us with data 
+- `modelsummary` -- gives us access to the `modelsummary()` function for presenting regression outputs
+
+```{r}
+library(pacman)
+p_load(tidyverse, gapminder, modelsummary)
+```
+
+## Manipulate Data
+
+Take a look at the first few observations of the `gapminder` dataset:
+
+```{r}
+head(gapminder)
+```
+
+Standardize the `pop`, `lifeExp`, and `gdpPercap` variables in `gapminder` **by year**, and store the resulting data farme in an object called `data_df`:
+
+```{r}
+data_df <- gapminder |>
+            group_by(year) |>
+            mutate(pop = (pop - mean(pop))/sd(pop), 
+                    lifeExp = (lifeExp - mean(lifeExp))/sd(lifeExp),
+                    gdpPercap = (gdpPercap - mean(gdpPercap))/sd(gdpPercap)) |>
+            ungroup() 
+```
+
+Store observations from 1957 and 1997 into separate objects called `data57_df` and `data97_df`, respectively.
+
+```{r}            
+data57_df <- data_df |>
+              filter(year == 1957)
+            
+data97_df <- data_df |>
+              filter(year == 1997)
+```
+
+Print the first few observations of `data57_df` to make sure all has been done correctly.
+
+```{r}
+head(data57_df)
+```
+
+Print the first few observations of `data97_df` to make sure all has been done correctly.
+
+```{r}
+head(data97_df)
+```
+
+
+## Plot Data 
+
+Let's plot the cross-sections of `lifeExp` and `pop` for 1957 and 1997, respectively.
+
+```{r}
+ggplot(data57_df, aes(x = pop, y = lifeExp)) +
+  geom_point()
+
+
+ggplot(data97_df, aes(x = pop, y = lifeExp)) +
+  geom_point()
+```
+
+Are the above plots helpful? Not really -- outliers in the `pop` dimension are stretching the plots and making them uninformative.
+
+We can deal with this by removing such outliers from the plots.
+Make the same plots, but this time exclude the major outliers. 
+
+```{r}
+ggplot(data57_df %>% filter(abs(pop) <= 3), aes(x = pop, y = lifeExp)) +
+  geom_point()
+
+
+ggplot(data97_df %>% filter(abs(pop) <= 3), aes(x = pop, y = lifeExp)) +
+  geom_point()
+```
+
+Is there any kind of clear relationship between `pop` and `lifeExp`?
+
+Now let's plot the cross-sectional relationship between `pop` and `gdpPercap` to see if there's any evidence for an interesting relationship.
+Exclude the `pop` outliers once again, but also exclude `gdpPercap` outliers.
+
+
+```{r}
+ggplot(data57_df %>% filter(pop <= 3, gdpPercap <= 3), aes(x = pop, y = gdpPercap)) +
+  geom_point()
+
+
+ggplot(data97_df %>% filter(pop <= 3, gdpPercap <= 3), aes(x = pop, y = gdpPercap)) +
+  geom_point()
+```
+
+Is there any kind of clear relationship between `pop` and `gdpPercap`?
+
+Finally, let's plot the relationship between `lifeExp` and `gdpPercap` in 1957 and 1997, respectively, without excluding any outliers.
+
+```{r}
+ggplot(data57_df, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point()
+
+
+ggplot(data97_df, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point()
+```
+
+Is there any kind of clear relationship between `lifeExp` and `gdpPercap`?
+
+Draw a line of best fit through the data in both plots.
+Remove the outlier in the 1957 plot.
+
+```{r}
+ggplot(data57_df %>% filter(gdpPercap < 3), aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "red")
+
+
+ggplot(data97_df, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "red")
+```
+
+## Estimate Regression Models
+
+Regress `lifeExp` on `gdpPercap` for the 1957 and 1997 samples separately:
+
+```{r}
+mod57 <- lm(formula = lifeExp ~ gdpPercap, data = data57_df)
+mod97 <- lm(formula = lifeExp ~ gdpPercap, data = data97_df)
+```
+
+Present the results of these regressions together in a table using `modelsummary()`:
+
+```{r}
+models <- list("Model 57" = mod57, "Model 97" = mod97)
+modelsummary(models, stars = TRUE)
+```
+
+## Test Hypotheses  
+
+### Two-Sided Tests
+
+First, let us manually test whether the effect of `gdpPercap` on `lifeExp` is **nonzero** with a 99% level of confidence for the '57 and '97 sample regressions.
+Note that this implies we must carry out a two-sided test on the $\beta_1$ coefficient estimate in both models, with our test statistic distribution being the $t$-distribution.
+
+Separately pass the '57 and '97 regression model outputs into `summary()`, and store as new objects `modsum57` and `modsum97`, respectively.
+
+```{r}
+modsum57 <- summary(mod57)
+modsum97 <- summary(mod97)
+```
+
+Store the degrees of freedom of both regressions as objects `dof57` and `dof97`, respectively.
+If these two values are the same, then just store them into an object called `dof` and remove `dof57` and `dof97` from the work environment.
+
+```{r}
+dof57 <- modsum57$df[2] 
+dof97 <- modsum97$df[2] 
+if (dof57 == dof97){
+  dof <- dof57
+  rm(dof57, dof97)  
+  print(dof)
+}
+```
+
+Using the above degrees of freedom, store the $t$-stats associated with a two-sided $p$-value of 0.01 (99% level of confidence) for the '57 and '97 samples into objects `t_double_57` and `t_double_97`, respectively.
+
+```{r}
+t_double99_57 <- qt(0.995, dof)
+t_double99_97 <- qt(0.995, dof)
+```
+
+Now store the $t$-stats associated with our desired test as objects `t_57` and `t_97`, respectively:
+
+```{r}
+t_57 <- (modsum57$coefficients[2,1] - 0) / modsum57$coefficients[2,2]
+t_97 <- (modsum97$coefficients[2,1] - 0) / modsum97$coefficients[2,2]
+```
+
+Create objects `test57` and `test97` that take the value `TRUE` if the null hypothesis is rejected, and `FALSE` otherwise.
+
+```{r}
+test57 <- abs(t_57) > t_double99_57
+test97 <- abs(t_97) > t_double99_97
+```
+
+Print `test57` and `test97` in the console to see if the null hypothesis were rejected.
+
+Suppose we want to conduct the same kind of test, but this time we want to check whether $\beta_1 \neq 1$.
+Carry out the same process as above, but this time in a single code chunk.
+Note that you may reuse `t_double99_57` and `t_double99_97`.
+
+```{r}
+t_57 <- (modsum57$coefficients[2,1] - 1) / modsum57$coefficients[2,2]
+t_97 <- (modsum97$coefficients[2,1] - 1) / modsum97$coefficients[2,2]
+test57 <- abs(t_57) > t_double99_57
+test97 <- abs(t_97) > t_double99_97
+```
+
+### One-Sided Tests
+
+Carry out the following test with a 95% level of confidence on both samples:
+
+- $H_0$: $\beta_1 \geq 1$ 
+- $H_1$: $\beta_1 < 1$ 
+
+```{r}
+t_less95 <- qt(0.05, dof)
+t_57 <- (modsum57$coefficients[2,1] - 1) / modsum57$coefficients[2,2]
+t_97 <- (modsum97$coefficients[2,1] - 1) / modsum97$coefficients[2,2]
+test57 <- t_57 < t_less95
+test97 <- t_97 < t_less95 
+```
+
+Carry out the following test with a 95% level of confidence on both samples:
+
+- $H_0$: $\beta_1 \leq -1$ 
+- $H_1$: $\beta_1 > -1$ 
+
+```{r}
+t_greater95 <- qt(0.95, dof)
+t_57 <- (modsum57$coefficients[2,1] - (-1)) / modsum57$coefficients[2,2]
+t_97 <- (modsum97$coefficients[2,1] - (-1)) / modsum97$coefficients[2,2]
+test57 <- t_57 > t_greater95
+test97 <- t_97 > t_greater95 
+```
+
+Carry out the following test with a 99% level of confidence on both samples:
+
+- $H_0$: $\beta_1 \leq 0.5$ 
+- $H_1$: $\beta_1 > 0.5$ 
+
+```{r}
+t_greater99 <- qt(0.99, dof)
+t_57 <- (modsum57$coefficients[2,1] - (0.5)) / modsum57$coefficients[2,2]
+t_97 <- (modsum97$coefficients[2,1] - (0.5)) / modsum97$coefficients[2,2]
+test57 <- t_57 > t_greater99
+test97 <- t_97 > t_greater99 
+```
+
+
