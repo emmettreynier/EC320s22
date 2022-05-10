@@ -44,6 +44,11 @@ Each bullet point represents a given week.
 4. **Simple Linear Regression**
 [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/labs/04-simple-linear-regression/04-simple-linear-regression.html)
 
+5. **Midterm Review** 
+
+6. **Hypothesis Testing**
+[.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/labs/06-hypothesis-testing/06-hypothesis-testing.html)
+
 ## Contributors
 
 Material for this course has contributions from [Ed Rubin](http://edrub.in/) ([@edrubin](https://github.com/edrubin)), [Kyle Raze](https://kyleraze.com/) ([@kyleraze](https://github.com/kyleraze)), and [Philip Economides](https://philip-economides.com/)([@peconomi](https://github.com/peconomi)), who have taught the class prior to me and graciously made their work public. I also source some material from [Nick Huntington-Klein](https://nickchk.com/) ([@NickCH-K](https://github.com/NickCH-K)), who maintains a [trove of resources](https://nickchk.com/causalgraphs.html) for learning causal inference. 
