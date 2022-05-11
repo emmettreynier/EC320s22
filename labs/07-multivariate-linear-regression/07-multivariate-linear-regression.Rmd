@@ -1,0 +1,203 @@
+---
+title: "**Multivariate Linear Regression**"
+author: |
+        | Giorgi Nikolaishvili
+        | EC 320: Introduction to Econometrics
+        | University of Oregon
+date: "Spring 2022"
+output: 
+  html_document:
+    theme: flatly  
+    includes:
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+      
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F, cache = T)
+```
+
+## Recap
+
+In the previous two (recorded) labs, we learned the following:
+
+- Estimating simple linear regression models (using `lm()`)
+- Presenting model estimates (using `modelsummary()` from the `modelsummary` package)
+- Testing hypotheses regarding the possible true values of model coefficients (using `summary()` to retrieve model estimates, and `qt()` to generate critical $t$-statistics)
+
+In today's lab we will apply the same exact functions as above to **multivariate** linear regression modeling -- in other words, we will now consider more than just one regressor (independent variable).
+
+## Intuition
+
+Let's begin by briefly and non-rigorously (and certainly not comprehensively) discussing why multivariate regression model specification is oftentimes necessary.
+
+Suppose we are interested in learning the effect of some variable $X$ on $Y$.
+
+Why can't we just estimate a simple linear regression model of the form $Y = \beta_0 + \beta_1 X + \varepsilon$? 
+
+Well, sometimes we can! But this is very rare, and difficult to justify.
+
+Oftentimes a simple regression will yield "inaccurate" results with regards to the *true* effect of $X$ on $Y$, because of **OMITTED VARIABLE BIAS**.
+
+Omitted variable bias is caused by the existence of a third variable $Z$ that also affects $Y$ and is correlated with $X$.
+In such a case, we must account for the variation in $Z$ by including it in our model:
+$$ Y = \beta_0 + \beta_1 X + \beta_2 Z + \upsilon $$
+
+Why? **Because if we do not account for the variation in $Y$ caused by $Z$, then the least squares (LS) estimator will attribute said variation to $X$ and bias our estimate of $\beta_1$:**
+
+- If $Corr(X,Z) > 0$ and $\beta_2 > 0$ and we do not include $Z$ as a regressor in our model, then our estimate of $\beta_1$ will likely be larger than its true value (**positively biased**).
+
+- If $Corr(X,Z) > 0$ and $\beta_2 < 0$ and we do not include $Z$ as a regressor in our model, then our estimate of $\beta_1$ will likely be smaller than its true value (**negatively biased**).
+
+- If $Corr(X,Z) < 0$ and $\beta_2 > 0$ and we do not include $Z$ as a regressor in our model, then our estimate of $\beta_1$ will likely be smaller than its true value (**negatively biased**).
+
+- If $Corr(X,Z) < 0$ and $\beta_2 < 0$ and we do not include $Z$ as a regressor in our model, then our estimate of $\beta_1$ will likely be larger than its true value (**positively biased**).
+
+If you are still unconvinced that excluding $Z$ from our model of $Y$ will bias our estimate of $\beta_1$, consider that if the following is the *true* model of $Y$:
+$$Y = \beta_0 + \beta_1 X + \beta_2 Z + \upsilon$$
+and instead we estimate 
+$$Y = \beta_0 + \beta_1 X + \varepsilon$$
+then it must be true that 
+$$ \varepsilon = \beta_2 Z + \upsilon $$
+which implies that $Corr(X,\varepsilon) \neq 0$, which violates one of the main assumptions for the linear unbiasedness of the LS estimator! 
+The likely direction of this bias is a product of the covariance/correlation between $X$ and $Z$. 
+
+## Example
+
+Suppose we would like to estimate the effect of education on wage.
+
+Would it be wise to estimate the below regression model?
+
+$$\text{wage} = \beta_0 + \beta_1 \text{education} + \varepsilon$$
+
+**Probably not -- there are plenty of variables other than education that affect wages while being correlated with education!** 
+
+Can you think of any?
+
+- Ability
+- Years of experience (?)
+- Connections/family/background (?)
+
+So the model we should ideally be estimating would look something like the following:
+
+$$\text{wage} = \beta_0 + \beta_1 \text{education} + \beta_2 \text{ability} + \varepsilon$$
+
+Had we estimated the model without controlling for ability, in which direction would $\beta_1$ likely be biased? 
+
+Consider that, intuitively, the following is probably true:
+- $Corr(\text{education},\text{ability}) > 0$
+- $\beta_2 > 0$
+
+Then we know $\beta_1$ must be biased *positively* / *upward*. 
+
+## Another Example
+
+In this next example, we will conduct an empirical analysis involving the concepts we have touched on so far.
+
+Load the following packages:
+
+- `tidyverse` -- this will be used for data manipulation, plotting, etc.
+- `modelsummary` -- gives us access to the `modelsummary()` function for presenting regression outputs
+- `AER` -- source of data
+
+```{r}
+library(pacman)
+p_load(tidyverse, modelsummary, AER);
+```
+
+We will be working with the `CASchools` dataset that lives within the `AER` package.
+
+```{r}
+data(CASchools) # special way to load dataset from `AER`
+head(CASchools) 
+```
+
+This dataset contains 14 variables -- we will only be using the following:
+
+- `students`: # of students in a given school
+- `teachers`: # of teachers in a given school
+- `read`: average SAT Reading score in a given scool
+- `math`: average SAT Math score in a given school
+- `english`: share of English learning students (non-native speakers) in a given school
+
+```{r}
+data_df <- CASchools %>%
+            select(students, teachers, read, math, english) 
+```
+
+Suppose we would like to **estimate the effect of classroom size on test scores.**
+
+First, we need to construct a measure of classroom size, and a measure of test scores using the given data.
+
+```{r}
+data_df <- data_df %>%
+            mutate(size = students/teachers,
+                    score = (read + math)/2) %>%
+            select(-c(students,teachers,read,math)) # Select all but these variables
+head(data_df)
+```
+
+Let's plot cross-sections of this data:
+
+```{r message=FALSE, warning=FALSE}
+ggplot(data_df, aes(x = size, score)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  theme_minimal()
+
+ggplot(data_df, aes(x = size, english)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  theme_minimal()
+
+ggplot(data_df, aes(x = english, score)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  theme_minimal()
+```
+
+Let's create a correlation matrix using the given sample:
+
+```{r}
+cor(data_df)
+```
+
+What story is the above correlation matrix telling us?
+
+- Larger class sizes are associated with lower SAT scores
+- Larger class sizes are associated with a greater share of English learners
+- A greater share of English learners is associated with lower SAT scores
+
+So, if we were to estimate below simple regression of `score` on `size`, is our $\beta_1$ estimate likely to be biased or unbiased? Why?
+
+$$ \text{score} = \beta_0 + \beta_1 \text{class size} + \varepsilon $$
+
+From the data plots and correlation matrix we know that class size is positive correlated with the share of English learners in the class, which in turn is negatively correlated with the average class score.
+
+Therefore, it is likely the case that our $\beta_1$ estimate will have **negative bias!**
+
+What if we instead regress `score` on both `class size` and `english` by estimating the below model? 
+
+$$ \text{score} = \beta_0 + \beta_1 \text{class size} + \beta_2 \text{english} + \varepsilon $$
+
+We are now controlling for the effect of `english` on `score`, which rids our $\beta_1$ estimate of omitted variable bias. 
+
+Now let's actually carry out the above analysis and see what we get:
+
+```{r}
+# Estimate both models 
+mod_simple <- lm(formula = score ~ size, data = data_df)
+mod_multi  <- lm(formula = score ~ size + english, data = data_df)
+
+# Create and print regression table 
+reg_table <- modelsummary(list(mod_simple, mod_multi))
+reg_table
+```
+
+- Do these results confirm our initial suspicions?
+
+- What can we say about model fit? 
+
