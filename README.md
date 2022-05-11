@@ -47,7 +47,10 @@ Each bullet point represents a given week.
 5. **Midterm Review** 
 
 6. **Hypothesis Testing**
-[.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/labs/06-hypothesis-testing/06-hypothesis-testing.html)
+[.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/labs/06-hypothesis-testing/06-hypothesis-testing.html) 
+
+7. **Multivariate Linear Regression**
+[.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/labs/07-multivariate-linear-regression/07-multivariate-linear-regression.html)
 
 ## Contributors
 
