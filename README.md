@@ -30,6 +30,9 @@ The HTML versions of the lecture slides allow you to view animations and interac
 
 11. **Multiple Regression Inference** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/11-multiple-reg-ii/11-MLR_Inference.html#1) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/11-multiple-reg-ii/11-MLR_Inference.pdf)  
 
+12. **Nonlinear Relationships** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/11-multiple-reg-ii/11-MLR_Inference.html#1) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/12-nonlinear-variables/12-Nonlinear_Relationships.pdf)  
+
+
 
 ## Labs
 
