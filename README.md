@@ -28,6 +28,9 @@ The HTML versions of the lecture slides allow you to view animations and interac
 
 10. **Multiple Regression Estimation** [.html](https://rawcdn.githack.com/emmettsaulnier/EC320s22/1cc50c90fa8d81e394094063cb11a823d920a266/lectures/10-multiple-reg-i/10-Multiple_LR_Est.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/10-multiple-reg-i/10-Multiple_LR_est.pdf)  
 
+11. **Multiple Regression Inference** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/11-multiple-reg-ii/11-MLR_Inference.html#1) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/11-multiple-reg-ii/11-MLR_Inference.pdf)  
+
+
 ## Labs
 
 Each bullet point represents a given week.
