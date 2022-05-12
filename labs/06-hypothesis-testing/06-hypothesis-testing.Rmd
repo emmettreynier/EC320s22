@@ -49,7 +49,7 @@ Load the following packages:
 - `gapminder` -- provides us with data 
 - `modelsummary` -- gives us access to the `modelsummary()` function for presenting regression outputs
 
-```{r}
+```{r} 
 library(pacman)
 p_load(tidyverse, gapminder, modelsummary)
 ```
@@ -59,28 +59,31 @@ p_load(tidyverse, gapminder, modelsummary)
 Take a look at the first few observations of the `gapminder` dataset:
 
 ```{r}
-head(gapminder)
+head(gapminder) 
 ```
 
-Standardize the `pop`, `lifeExp`, and `gdpPercap` variables in `gapminder` **by year**, and store the resulting data farme in an object called `data_df`:
+Standardize the `pop`, `lifeExp`, and `gdpPercap` variables in `gapminder` **by year**, and store the resulting data frame in an object called `data_df`:
 
 ```{r}
-data_df <- gapminder |>
+data_df <- gapminder |> 
             group_by(year) |>
-            mutate(pop = (pop - mean(pop))/sd(pop), 
-                    lifeExp = (lifeExp - mean(lifeExp))/sd(lifeExp),
-                    gdpPercap = (gdpPercap - mean(gdpPercap))/sd(gdpPercap)) |>
+            mutate(pop = (pop - mean(pop))/sd(pop),
+                   lifeExp = (lifeExp - mean(lifeExp))/sd(lifeExp), 
+                   gdpPercap = (gdpPercap - mean(gdpPercap))/sd(gdpPercap)) |>
             ungroup() 
+head(data_df)
 ```
 
 Store observations from 1957 and 1997 into separate objects called `data57_df` and `data97_df`, respectively.
 
 ```{r}            
-data57_df <- data_df |>
+data57_df <- data_df %>%
               filter(year == 1957)
-            
-data97_df <- data_df |>
+
+data97_df <- data_df %>%
               filter(year == 1997)
+
+rm(data_df)
 ```
 
 Print the first few observations of `data57_df` to make sure all has been done correctly.
@@ -95,18 +98,18 @@ Print the first few observations of `data97_df` to make sure all has been done c
 head(data97_df)
 ```
 
-
 ## Plot Data 
 
-Let's plot the cross-sections of `lifeExp` and `pop` for 1957 and 1997, respectively.
+Let's separately plot the cross-sections of `lifeExp` and `pop` for 1957 and 1997, respectively.
 
 ```{r}
 ggplot(data57_df, aes(x = pop, y = lifeExp)) +
-  geom_point()
+    labs(title = "Year 1957") +
+    geom_point() 
 
-
-ggplot(data97_df, aes(x = pop, y = lifeExp)) +
-  geom_point()
+ggplot(data97_df, aes(x = pop, y = lifeExp))  +
+    labs(title = "Year 1997") +
+    geom_point() 
 ```
 
 Are the above plots helpful? Not really -- outliers in the `pop` dimension are stretching the plots and making them uninformative.
@@ -115,12 +118,13 @@ We can deal with this by removing such outliers from the plots.
 Make the same plots, but this time exclude the major outliers. 
 
 ```{r}
-ggplot(data57_df %>% filter(abs(pop) <= 3), aes(x = pop, y = lifeExp)) +
-  geom_point()
+ggplot(data57_df %>% filter(abs(pop) < 3), aes(x = pop, y = lifeExp)) +
+    labs(title = "Year 1957") +
+    geom_point() 
 
-
-ggplot(data97_df %>% filter(abs(pop) <= 3), aes(x = pop, y = lifeExp)) +
-  geom_point()
+ggplot(data97_df %>% filter(abs(pop) < 3), aes(x = pop, y = lifeExp))  +
+    labs(title = "Year 1997") +
+    geom_point() 
 ```
 
 Is there any kind of clear relationship between `pop` and `lifeExp`?
@@ -130,12 +134,13 @@ Exclude the `pop` outliers once again, but also exclude `gdpPercap` outliers.
 
 
 ```{r}
-ggplot(data57_df %>% filter(pop <= 3, gdpPercap <= 3), aes(x = pop, y = gdpPercap)) +
-  geom_point()
+ggplot(data57_df %>% filter(abs(pop) < 3, abs(gdpPercap) < 3), aes(x = pop, y = gdpPercap)) +
+    labs(title = "Year 1957") +
+    geom_point() 
 
-
-ggplot(data97_df %>% filter(pop <= 3, gdpPercap <= 3), aes(x = pop, y = gdpPercap)) +
-  geom_point()
+ggplot(data97_df %>% filter(abs(pop) < 3), aes(x = pop, y = gdpPercap))  +
+    labs(title = "Year 1997") +
+    geom_point() 
 ```
 
 Is there any kind of clear relationship between `pop` and `gdpPercap`?
@@ -143,12 +148,13 @@ Is there any kind of clear relationship between `pop` and `gdpPercap`?
 Finally, let's plot the relationship between `lifeExp` and `gdpPercap` in 1957 and 1997, respectively, without excluding any outliers.
 
 ```{r}
-ggplot(data57_df, aes(x = gdpPercap, y = lifeExp)) +
-  geom_point()
+ggplot(data57_df %>% filter(abs(lifeExp) < 3, abs(gdpPercap) < 3), aes(x = gdpPercap, y = lifeExp)) +
+    labs(title = "Year 1957") +
+    geom_point() 
 
-
-ggplot(data97_df, aes(x = gdpPercap, y = lifeExp)) +
-  geom_point()
+ggplot(data97_df %>% filter(abs(lifeExp) < 3, abs(gdpPercap) < 3), aes(x = gdpPercap, y = lifeExp))  +
+    labs(title = "Year 1997") +
+    geom_point() 
 ```
 
 Is there any kind of clear relationship between `lifeExp` and `gdpPercap`?
@@ -157,14 +163,16 @@ Draw a line of best fit through the data in both plots.
 Remove the outlier in the 1957 plot.
 
 ```{r}
-ggplot(data57_df %>% filter(gdpPercap < 3), aes(x = gdpPercap, y = lifeExp)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE, color = "red")
+ggplot(data57_df %>% filter(abs(lifeExp) < 3, abs(gdpPercap) < 3), aes(x = gdpPercap, y = lifeExp)) +
+    labs(title = "Year 1957") +
+    geom_point() +
+    geom_smooth(method = "lm", se = FALSE, color = "red")
 
+ggplot(data97_df %>% filter(abs(lifeExp) < 3, abs(gdpPercap) < 3), aes(x = gdpPercap, y = lifeExp))  +
+    labs(title = "Year 1997") +
+    geom_point() +
+    geom_smooth(method = "lm", se = FALSE, color = "red")
 
-ggplot(data97_df, aes(x = gdpPercap, y = lifeExp)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE, color = "red")
 ```
 
 ## Estimate Regression Models
@@ -179,7 +187,7 @@ mod97 <- lm(formula = lifeExp ~ gdpPercap, data = data97_df)
 Present the results of these regressions together in a table using `modelsummary()`:
 
 ```{r}
-models <- list("Model 57" = mod57, "Model 97" = mod97)
+models <- list("Model '57" = mod57, "Model '97" = mod97)
 modelsummary(models, stars = TRUE)
 ```
 
@@ -189,6 +197,9 @@ modelsummary(models, stars = TRUE)
 
 First, let us manually test whether the effect of `gdpPercap` on `lifeExp` is **nonzero** with a 99% level of confidence for the '57 and '97 sample regressions.
 Note that this implies we must carry out a two-sided test on the $\beta_1$ coefficient estimate in both models, with our test statistic distribution being the $t$-distribution.
+
+- $H_0$: $\beta_1 = 0$  
+- $H_1$: $\beta_1 \neq 0$
 
 Separately pass the '57 and '97 regression model outputs into `summary()`, and store as new objects `modsum57` and `modsum97`, respectively.
 
@@ -204,13 +215,13 @@ If these two values are the same, then just store them into an object called `do
 dof57 <- modsum57$df[2] 
 dof97 <- modsum97$df[2] 
 if (dof57 == dof97){
-  dof <- dof57
-  rm(dof57, dof97)  
-  print(dof)
+  dof <- dof57 
+  rm(dof57, dof97)
+  print(dof) 
 }
 ```
 
-Using the above degrees of freedom, store the $t$-stats associated with a two-sided $p$-value of 0.01 (99% level of confidence) for the '57 and '97 samples into objects `t_double_57` and `t_double_97`, respectively.
+Using the above degrees of freedom, store the $t$-stats associated with a two-sided $p$-value of 0.01 (99% level of confidence) for the '57 and '97 samples into objects `t_double99_57` and `t_double99_97`, respectively.
 
 ```{r}
 t_double99_57 <- qt(0.995, dof)
@@ -252,11 +263,35 @@ Carry out the following test with a 95% level of confidence on both samples:
 - $H_1$: $\beta_1 < 1$ 
 
 ```{r}
+ # Save critical t-stat
 t_less95 <- qt(0.05, dof)
+
+# Create test t-stats 
 t_57 <- (modsum57$coefficients[2,1] - 1) / modsum57$coefficients[2,2]
 t_97 <- (modsum97$coefficients[2,1] - 1) / modsum97$coefficients[2,2]
+
+# Compare test t-stats with critical t-stat
+# (TRUE if null is rejected, FALSE otherwise)
 test57 <- t_57 < t_less95
 test97 <- t_97 < t_less95 
+
+#
+# Print 1957 test result
+#
+if (test57 == TRUE){
+  print("For the 1957 sample, the null hypothesis is rejected with a 95% level of confidence.")
+}else{
+  print("For the 1957 sample, the null hypothesis cannot be rejected with a 95% level of confidence.")
+}
+
+#
+# Print 1997 test result
+#
+if (test97 == TRUE){
+  print("For the 1997 sample, the null hypothesis is rejected with a 95% level of confidence.")
+}else{
+  print("For the 1997 sample, the null hypothesis cannot be rejected with a 95% level of confidence.")
+}
 ```
 
 Carry out the following test with a 95% level of confidence on both samples:
@@ -265,11 +300,29 @@ Carry out the following test with a 95% level of confidence on both samples:
 - $H_1$: $\beta_1 > -1$ 
 
 ```{r}
-t_greater95 <- qt(0.95, dof)
+t_greater95 <- qt(0.95, dof) # Save critical t-stat
 t_57 <- (modsum57$coefficients[2,1] - (-1)) / modsum57$coefficients[2,2]
 t_97 <- (modsum97$coefficients[2,1] - (-1)) / modsum97$coefficients[2,2]
 test57 <- t_57 > t_greater95
-test97 <- t_97 > t_greater95 
+test97 <- t_97 > t_greater95
+
+#
+# Print 1957 test result
+#
+if (test57 == TRUE){
+  print("For the 1957 sample, the null hypothesis is rejected with a 95% level of confidence.")
+}else{
+  print("For the 1957 sample, the null hypothesis cannot be rejected with a 95% level of confidence.")
+}
+
+#
+# Print 1997 test result
+#
+if (test97 == TRUE){
+  print("For the 1997 sample, the null hypothesis is rejected with a 95% level of confidence.")
+}else{
+  print("For the 1997 sample, the null hypothesis cannot be rejected with a 95% level of confidence.")
+}
 ```
 
 Carry out the following test with a 99% level of confidence on both samples:
@@ -283,6 +336,22 @@ t_57 <- (modsum57$coefficients[2,1] - (0.5)) / modsum57$coefficients[2,2]
 t_97 <- (modsum97$coefficients[2,1] - (0.5)) / modsum97$coefficients[2,2]
 test57 <- t_57 > t_greater99
 test97 <- t_97 > t_greater99 
+
+#
+# Print 1957 test result
+#
+if (test57 == TRUE){
+  print("For the 1957 sample, the null hypothesis is rejected with a 99% level of confidence.")
+}else{
+  print("For the 1957 sample, the null hypothesis cannot be rejected with a 99% level of confidence.")
+}
+
+#
+# Print 1997 test result
+#
+if (test97 == TRUE){
+  print("For the 1997 sample, the null hypothesis is rejected with a 99% level of confidence.")
+}else{
+  print("For the 1997 sample, the null hypothesis cannot be rejected with a 99% level of confidence.")
+}
 ```
-
-
