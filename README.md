@@ -32,7 +32,7 @@ The HTML versions of the lecture slides allow you to view animations and interac
 
 12. **Nonlinear Relationships** [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/lectures/12-nonlinear-variables/12-Nonlinear_Relationships.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/12-nonlinear-variables/12-Nonlinear_Relationships.pdf)  
 
-
+13. **Categorical Variables** [.html](https://rawcdn.githack.com/emmettsaulnier/EC320s22/dc14ad8ba3ced1ef1463b7bce77645b92e05c9a6/lectures/13-categorical-variables/13-Categorical_Variables.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/13-categorical-variables/13-Categorical_Variables.pdf)  
 
 ## Labs
 
