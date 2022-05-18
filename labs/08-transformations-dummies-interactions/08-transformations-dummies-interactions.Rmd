@@ -77,13 +77,19 @@ $$ \log(Y) = \beta_0 + \beta_1 X + \varepsilon $$
 
 The following is important to remember:
 
-$$ \Delta \log(Y) \approx \% \Delta Y $$
+$$ \Delta \log(Y) \approx \frac{\% \Delta Y}{100} $$
 
-And since 
+We may find that 
 
-$$ \frac{\Delta \log(Y)}{\Delta X} = \frac{\%\Delta Y}{\Delta X} = \beta_1 $$
+$$ \frac{\Delta \log(Y)}{\Delta X} = \beta_1 $$
+and since 
 
-this implies we may interpret $\beta_1$ the percentage change in $Y$ due to a unit increase in $X$.
+$$ \frac{\Delta \log(Y)}{\Delta X}  = \frac{\%\Delta Y / 100}{\Delta X}  $$
+then 
+
+$$ \beta_1 = \frac{\%\Delta Y / 100}{\Delta X} $$
+
+this implies we may interpret $100 * \beta_1$ as the percentage change in $Y$ due to a unit increase in $X$.
 
 ```{r}
 reg = lm(formula = log(mpg) ~ wt, data = mtcars)
@@ -100,12 +106,12 @@ Recall that $\frac{d \log(X)}{d X} = \frac{1}{X}$.
 
 Therefore, we may find that
 
-$$ \frac{\Delta Y}{\Delta X} = \beta_1 \frac{1}{X}$$
+$$ \frac{\partial Y}{\partial X} = \beta_1 \frac{1}{X} \approx \frac{\Delta Y}{\Delta X}$$
 
 Solving for $\beta_1$ gives us 
 
-$$ \beta_1 = \frac{\Delta Y}{\Delta X} X = \frac{\Delta Y}{\Delta X / X } = \frac{\Delta Y}{\% \Delta X}$$
-In words, this implies that we may interpret $\beta_1$ as representing the change in $Y$ due to a percentage increase in $X$.
+$$ \beta_1 = \frac{\Delta Y}{\Delta X} X = \frac{\Delta Y}{\Delta X / X } = \frac{\Delta Y}{\% \Delta X / 100} = 100 \frac{\Delta Y}{\%\Delta X}$$
+In words, this implies that we may interpret $\beta_1/100$ as representing the change in units of $Y$ due to a percentage increase in $X$.
 
 ```{r}
 reg = lm(formula = mpg ~ log(wt), data = mtcars)
@@ -120,11 +126,11 @@ $$ \log(Y) = \beta_0 + \beta_1 \log(X) + \varepsilon $$
 
 Notice that 
 
-$$ \frac{\Delta \log(Y)}{\Delta X} = \beta_1 \frac{1}{X} $$
+$$ \frac{\partial \log(Y)}{\partial X} = \beta_1 \frac{1}{X} \approx \frac{\Delta \log(Y)}{\Delta X} $$
 
 so that 
 
-$$ \beta_1 = \frac{\Delta \log(Y)}{\Delta X / X} = \frac{\% \Delta Y}{\% \Delta X} $$.
+$$ \beta_1 = \frac{\Delta \log(Y)}{\Delta X / X} = \frac{100 \cdot \Delta \log(Y)}{100 \cdot \Delta X / X} =  \frac{\% \Delta Y}{\% \Delta X} $$.
 
 In words, $\beta_1$ represents the elasticity of $Y$ with respect to $X$ -- the percentage change in $Y$ associated with a one percent increase in $X$.
 

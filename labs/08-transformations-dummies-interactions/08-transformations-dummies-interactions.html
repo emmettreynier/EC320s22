@@ -1925,12 +1925,17 @@ transformation of <span class="math inline">\(Y\)</span>?</p>
 <p><span class="math display">\[ \log(Y) = \beta_0 + \beta_1 X +
 \varepsilon \]</span></p>
 <p>The following is important to remember:</p>
-<p><span class="math display">\[ \Delta \log(Y) \approx \% \Delta Y
-\]</span></p>
-<p>And since</p>
+<p><span class="math display">\[ \Delta \log(Y) \approx \frac{\% \Delta
+Y}{100} \]</span></p>
+<p>We may find that</p>
 <p><span class="math display">\[ \frac{\Delta \log(Y)}{\Delta X} =
-\frac{\%\Delta Y}{\Delta X} = \beta_1 \]</span></p>
-<p>this implies we may interpret <span class="math inline">\(\beta_1\)</span> the percentage change in <span class="math inline">\(Y\)</span> due to a unit increase in <span class="math inline">\(X\)</span>.</p>
+\beta_1 \]</span> and since</p>
+<p><span class="math display">\[ \frac{\Delta \log(Y)}{\Delta X}  =
+\frac{\%\Delta Y / 100}{\Delta X}  \]</span> then</p>
+<p><span class="math display">\[ \beta_1 = \frac{\%\Delta Y /
+100}{\Delta X} \]</span></p>
+<p>this implies we may interpret <span class="math inline">\(100 *
+\beta_1\)</span> as the percentage change in <span class="math inline">\(Y\)</span> due to a unit increase in <span class="math inline">\(X\)</span>.</p>
 <pre class="r"><code>reg = lm(formula = log(mpg) ~ wt, data = mtcars)
 modelsummary(reg)</code></pre>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -2049,14 +2054,14 @@ interest is log-transformed?</p>
 <p>Recall that <span class="math inline">\(\frac{d \log(X)}{d X} =
 \frac{1}{X}\)</span>.</p>
 <p>Therefore, we may find that</p>
-<p><span class="math display">\[ \frac{\Delta Y}{\Delta X} = \beta_1
-\frac{1}{X}\]</span></p>
+<p><span class="math display">\[ \frac{\partial Y}{\partial X} = \beta_1
+\frac{1}{X} \approx \frac{\Delta Y}{\Delta X}\]</span></p>
 <p>Solving for <span class="math inline">\(\beta_1\)</span> gives us</p>
 <p><span class="math display">\[ \beta_1 = \frac{\Delta Y}{\Delta X} X =
-\frac{\Delta Y}{\Delta X / X } = \frac{\Delta Y}{\% \Delta X}\]</span>
-In words, this implies that we may interpret <span class="math inline">\(\beta_1\)</span> as representing the change in
-<span class="math inline">\(Y\)</span> due to a percentage increase in
-<span class="math inline">\(X\)</span>.</p>
+\frac{\Delta Y}{\Delta X / X } = \frac{\Delta Y}{\% \Delta X / 100} =
+100 \frac{\Delta Y}{\%\Delta X}\]</span> In words, this implies that we
+may interpret <span class="math inline">\(\beta_1/100\)</span> as
+representing the change in units of <span class="math inline">\(Y\)</span> due to a percentage increase in <span class="math inline">\(X\)</span>.</p>
 <pre class="r"><code>reg = lm(formula = mpg ~ log(wt), data = mtcars)
 modelsummary(reg)</code></pre>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -2173,11 +2178,13 @@ are log-transformed:</p>
 <p><span class="math display">\[ \log(Y) = \beta_0 + \beta_1 \log(X) +
 \varepsilon \]</span></p>
 <p>Notice that</p>
-<p><span class="math display">\[ \frac{\Delta \log(Y)}{\Delta X} =
-\beta_1 \frac{1}{X} \]</span></p>
+<p><span class="math display">\[ \frac{\partial \log(Y)}{\partial X} =
+\beta_1 \frac{1}{X} \approx \frac{\Delta \log(Y)}{\Delta X}
+\]</span></p>
 <p>so that</p>
 <p><span class="math display">\[ \beta_1 = \frac{\Delta \log(Y)}{\Delta
-X / X} = \frac{\% \Delta Y}{\% \Delta X} \]</span>.</p>
+X / X} = \frac{100 \cdot \Delta \log(Y)}{100 \cdot \Delta X / X}
+=  \frac{\% \Delta Y}{\% \Delta X} \]</span>.</p>
 <p>In words, <span class="math inline">\(\beta_1\)</span> represents the
 elasticity of <span class="math inline">\(Y\)</span> with respect to
 <span class="math inline">\(X\)</span> – the percentage change in <span class="math inline">\(Y\)</span> associated with a one percent increase
