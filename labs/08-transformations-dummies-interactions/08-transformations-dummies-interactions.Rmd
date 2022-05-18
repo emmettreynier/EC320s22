@@ -31,6 +31,28 @@ knitr::opts_chunk$set(echo = T, warning = F, message = F, cache = T)
 
 ---
 
+## Load Packages
+
+Install/load the `tidyverse` and `modelsummary` packages. 
+
+```{r}
+library(pacman)
+p_load(tidyverse, modelsummary)
+```
+
+Today we will use the `mtcars` dataset.
+We will focus on the `mpg`, `wt` and `am` variables.
+
+- `mpg` -- mpg (miles per gallon) is a determinant of fuel efficiency
+- `wt` -- weight of the vehicle in 1000s of lbs
+- `am` -- a binary variable signaling whether a vehicle has automatic (am=0) or manual (am=1) transmission configuration.
+
+```{r}
+head(mtcars %>% select(mpg, wt, am))
+```
+
+---
+
 ## Log Transformations
 
 At this point, we should be comfortable with interpreting the $\beta_1$ coefficient in the simple linear regression model when $Y$ and $X$ are both in levels:
@@ -40,6 +62,12 @@ $$ Y = \beta_0 + \beta_1 X + \varepsilon $$
 In such a model, $\beta_1$ represents the unit change in $Y$ associated with a unit increase in $X$.
 
 $$ \frac{\Delta Y}{\Delta X} = \beta_1 $$ 
+
+
+```{r}
+reg = lm(formula = mpg ~ wt, data = mtcars)
+modelsummary(reg)
+```
 
 ---
 
@@ -56,6 +84,11 @@ And since
 $$ \frac{\Delta \log(Y)}{\Delta X} = \frac{\%\Delta Y}{\Delta X} = \beta_1 $$
 
 this implies we may interpret $\beta_1$ the percentage change in $Y$ due to a unit increase in $X$.
+
+```{r}
+reg = lm(formula = log(mpg) ~ wt, data = mtcars)
+modelsummary(reg)
+```
 
 ---
 
@@ -74,6 +107,11 @@ Solving for $\beta_1$ gives us
 $$ \beta_1 = \frac{\Delta Y}{\Delta X} X = \frac{\Delta Y}{\Delta X / X } = \frac{\Delta Y}{\% \Delta X}$$
 In words, this implies that we may interpret $\beta_1$ as representing the change in $Y$ due to a percentage increase in $X$.
 
+```{r}
+reg = lm(formula = mpg ~ log(wt), data = mtcars)
+modelsummary(reg)
+```
+
 ---
 
 Lastly, let's interpret the $\beta_1$ coefficient in the following regression model, in which both the dependent variable and the regressor are log-transformed:
@@ -89,6 +127,11 @@ so that
 $$ \beta_1 = \frac{\Delta \log(Y)}{\Delta X / X} = \frac{\% \Delta Y}{\% \Delta X} $$.
 
 In words, $\beta_1$ represents the elasticity of $Y$ with respect to $X$ -- the percentage change in $Y$ associated with a one percent increase in $X$.
+
+```{r}
+reg = lm(formula = log(mpg) ~ log(wt), data = mtcars)
+modelsummary(reg)
+```
 
 --- 
 
@@ -109,6 +152,11 @@ $$ \frac{\partial Y}{\partial X} = \beta_1 + 2 \beta_2 X $$
 Furthermore, notice that the effect of $X$ on $Y$ is a function of $X$!
 
 So, for us to make a statement of the usual nature "a unit increase in $X$ is associated with a change in $Y$ by ... units", we have to specify an initial/benchmark level of $X$. 
+
+```{r}
+reg = lm(formula = mpg ~ wt + wt^2, data = mtcars)
+modelsummary(reg)
+```
 
 ---
 
@@ -138,6 +186,16 @@ so that
 $$ E[Y \,|\, D = 1] - E[Y \,|\, D = 0] = \beta_1 \, .$$ 
 
 In other words, $\beta_1$ captures the difference in the expected value of $Y$ in the case that $D = 1$ vs. $D = 0$ -- this is the effect of possessing the characteristic implied by $D = 1$ (you can think of it as some sort of treatment, if that helps). 
+
+```{r}
+reg1 = lm(formula = mpg ~ am, data = mtcars)
+modelsummary(reg1)
+```
+
+```{r}
+reg2 = lm(formula = mpg ~ wt + am, data = mtcars)
+modelsummary(list(reg1, reg2))
+```
 
 ---
 
@@ -172,5 +230,15 @@ So, $\beta_3$ may be interpreted as the effect of $Z$ on the effect of $X$ on $Y
 $$ \beta_3 = \frac{\partial}{\partial Z} \left(  \frac{\Delta Y}{\Delta X} \right) = \frac{\partial}{\partial X} \left(  \frac{\Delta Y}{\Delta Z} \right) $$
 
 Note that $X$ and $Z$ do not necessarily have to be continuous variables -- either one or both can be binary!
+
+```{r}
+reg1 = lm(formula = mpg ~ wt + am, data = mtcars)
+modelsummary(reg1)
+```
+
+```{r}
+reg2 = lm(formula = mpg ~ wt + am + wt*am, data = mtcars)
+modelsummary(list(reg1,reg2))
+```
 
 ---
