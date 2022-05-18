@@ -1,0 +1,176 @@
+---
+title: "**Transformations, Dummies, and Interactions**"
+author: |
+        | Giorgi Nikolaishvili
+        | EC 320: Introduction to Econometrics
+        | University of Oregon
+date: "Spring 2022"
+output: 
+  html_document:
+    theme: flatly  
+    includes:
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+      
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F, cache = T)
+```
+
+--- 
+
+## Recap
+
+- Simple linear regression (using `lm()`)
+- Multivariate linear regression (using `lm()`)
+- Presenting estimation results (using `modelsummary()`)
+- Hypothesis testing on regression coefficients (using `summary()` and `qt()`)
+
+---
+
+## Log Transformations
+
+At this point, we should be comfortable with interpreting the $\beta_1$ coefficient in the simple linear regression model when $Y$ and $X$ are both in levels:
+
+$$ Y = \beta_0 + \beta_1 X + \varepsilon $$ 
+
+In such a model, $\beta_1$ represents the unit change in $Y$ associated with a unit increase in $X$.
+
+$$ \frac{\Delta Y}{\Delta X} = \beta_1 $$ 
+
+---
+
+How do we interpret $\beta_1$ in the following regression, in which the dependent variable is a log transformation of $Y$?
+
+$$ \log(Y) = \beta_0 + \beta_1 X + \varepsilon $$
+
+The following is important to remember:
+
+$$ \Delta \log(Y) \approx \% \Delta Y $$
+
+And since 
+
+$$ \frac{\Delta \log(Y)}{\Delta X} = \frac{\%\Delta Y}{\Delta X} = \beta_1 $$
+
+this implies we may interpret $\beta_1$ the percentage change in $Y$ due to a unit increase in $X$.
+
+---
+
+How do we interpret $\beta_1$ in a model in which the dependent variable is in levels but the regressor of interest is log-transformed?
+
+$$ Y = \beta_0 + \beta_1 \log(X) + \varepsilon $$
+
+Recall that $\frac{d \log(X)}{d X} = \frac{1}{X}$.
+
+Therefore, we may find that
+
+$$ \frac{\Delta Y}{\Delta X} = \beta_1 \frac{1}{X}$$
+
+Solving for $\beta_1$ gives us 
+
+$$ \beta_1 = \frac{\Delta Y}{\Delta X} X = \frac{\Delta Y}{\Delta X / X } = \frac{\Delta Y}{\% \Delta X}$$
+In words, this implies that we may interpret $\beta_1$ as representing the change in $Y$ due to a percentage increase in $X$.
+
+---
+
+Lastly, let's interpret the $\beta_1$ coefficient in the following regression model, in which both the dependent variable and the regressor are log-transformed:
+
+$$ \log(Y) = \beta_0 + \beta_1 \log(X) + \varepsilon $$
+
+Notice that 
+
+$$ \frac{\Delta \log(Y)}{\Delta X} = \beta_1 \frac{1}{X} $$
+
+so that 
+
+$$ \beta_1 = \frac{\Delta \log(Y)}{\Delta X / X} = \frac{\% \Delta Y}{\% \Delta X} $$.
+
+In words, $\beta_1$ represents the elasticity of $Y$ with respect to $X$ -- the percentage change in $Y$ associated with a one percent increase in $X$.
+
+--- 
+
+## Polynomial Terms
+
+Suppose we have data on variables $Y$ and $X$, and want to estimate the effect of $X$ on $Y$.
+
+In most cases we would just regress $Y$ on $X$ -- but what if we suspect the relationship between $Y$ and $X$ to be nonlinear?
+
+We may attempt to captures nonlinearities by adding polynomials of $X$ in the regression model:
+
+$$ Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \varepsilon $$
+
+Notice that in the given model, the effects of variation in $X$ are captured by both $\beta_1$ and $\beta_2$:
+
+$$ \frac{\partial Y}{\partial X} = \beta_1 + 2 \beta_2 X $$ 
+
+Furthermore, notice that the effect of $X$ on $Y$ is a function of $X$!
+
+So, for us to make a statement of the usual nature "a unit increase in $X$ is associated with a change in $Y$ by ... units", we have to specify an initial/benchmark level of $X$. 
+
+---
+
+## Dummies
+
+A dummy is a categorical variable that takes on values of 1 or 0 to denote whether a given observation does or does not possess a certain characteristic.
+
+Dummies are also referred to as binary variables.
+
+Suppose we have data on a continuous variable $Y$ and a dummy $D$, and we want to estimate the effect of $D$ on $Y$. 
+We estimate the following model:
+
+$$ Y = \beta_0 + \beta_1 D + \varepsilon $$
+
+Notice that when $D = 0$, we have $Y = \beta_0 + \varepsilon$, and when $D = 1$, we have $Y = \beta_0 + \beta_1 + \varepsilon$. 
+
+Therefore, 
+
+$$ E[Y \,|\, D = 1] = \beta_0 + \beta_1 $$
+
+and 
+
+$$ E[Y \,|\, D = 0] = \beta_0 $$ 
+
+so that 
+
+$$ E[Y \,|\, D = 1] - E[Y \,|\, D = 0] = \beta_1 \, .$$ 
+
+In other words, $\beta_1$ captures the difference in the expected value of $Y$ in the case that $D = 1$ vs. $D = 0$ -- this is the effect of possessing the characteristic implied by $D = 1$ (you can think of it as some sort of treatment, if that helps). 
+
+---
+
+## Interaction Terms
+
+Suppose we have data on variables $X$, $Y$, and $Z$, and are interested in estimating the effects of $X$ and $Z$ on $Y$.
+
+The simplest model we could estimate in such a case is the following multivariate linear regression model:
+
+$$ Y = \beta_0 + \beta_1 X + \beta_2 Z + \varepsilon $$
+
+In this case $\beta_1$ represents the effect of $X$ on $Y$, and $\beta_2$ represents the effect of $Z$ on $Y$.
+
+But what if we suspect that the level of $Z$ affects the effect of $X$ on $Y$ and/or the level of $X$ affects the effect of $Z$ on $Y$?
+
+In other words, what if we suspect that $X$ and $Z$ **interact**?
+
+We may follow up on such suspicions by estimating the following model containing an **interaction term**:
+
+$$ Y = \beta_0 + \beta_1 X + \beta_2 Z + \beta_3 X Z + \varepsilon $$ 
+
+Notice that now we have 
+
+$$ \frac{\Delta Y}{\Delta X} = \beta_1 + \beta_3 Z $$
+
+and 
+
+$$ \frac{\Delta Y}{\Delta Z} = \beta_2 + \beta_3 X $$
+
+So, $\beta_3$ may be interpreted as the effect of $Z$ on the effect of $X$ on $Y$, or equivalently the effect of $X$ on the effect of $Z$ on $Y$:
+
+$$ \beta_3 = \frac{\partial}{\partial Z} \left(  \frac{\Delta Y}{\Delta X} \right) = \frac{\partial}{\partial X} \left(  \frac{\Delta Y}{\Delta Z} \right) $$
+
+Note that $X$ and $Z$ do not necessarily have to be continuous variables -- either one or both can be binary!
+
+---
