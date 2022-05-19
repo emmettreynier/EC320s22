@@ -160,7 +160,7 @@ Furthermore, notice that the effect of $X$ on $Y$ is a function of $X$!
 So, for us to make a statement of the usual nature "a unit increase in $X$ is associated with a change in $Y$ by ... units", we have to specify an initial/benchmark level of $X$. 
 
 ```{r}
-reg = lm(formula = mpg ~ wt + wt^2, data = mtcars)
+reg = lm(formula = mpg ~ wt + wtsq, data = mtcars %>% mutate(wtsq = wt^2))
 modelsummary(reg)
 ```
 
@@ -199,7 +199,12 @@ modelsummary(reg1)
 ```
 
 ```{r}
-reg2 = lm(formula = mpg ~ wt + am, data = mtcars)
+reg = lm(formula = log(mpg) ~ am, data = mtcars)
+modelsummary(reg) 
+```
+
+```{r}
+reg2 = lm(formula = mpg ~ am + wt, data = mtcars)
 modelsummary(list(reg1, reg2))
 ```
 
