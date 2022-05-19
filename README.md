@@ -34,6 +34,9 @@ The HTML versions of the lecture slides allow you to view animations and interac
 
 13. **Categorical Variables** [.html](https://rawcdn.githack.com/emmettsaulnier/EC320s22/dc14ad8ba3ced1ef1463b7bce77645b92e05c9a6/lectures/13-categorical-variables/13-Categorical_Variables.html) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/13-categorical-variables/13-Categorical_Variables.pdf)  
 
+14. **Interactive Relationships** [.html](https://rawcdn.githack.com/emmettsaulnier/EC320s22/fea5d5546dbbe3e0e50e2a19532a291f5526ecbe/lectures/14-interaction-terms/14-Interactive_Relationships.html#1) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/14-interaction-terms/14-Interactive_Relationships.pdf)  
+
+
 ## Labs
 
 Each bullet point represents a given week.
