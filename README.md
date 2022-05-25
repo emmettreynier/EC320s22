@@ -36,6 +36,8 @@ The HTML versions of the lecture slides allow you to view animations and interac
 
 14. **Interactive Relationships** [.html](https://rawcdn.githack.com/emmettsaulnier/EC320s22/fea5d5546dbbe3e0e50e2a19532a291f5526ecbe/lectures/14-interaction-terms/14-Interactive_Relationships.html#1) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/14-interaction-terms/14-Interactive_Relationships.pdf)  
 
+15. **Model Specification** [.html](https://rawcdn.githack.com/emmettsaulnier/EC320s22/7fc07fb1c8e79f88a0c8dd7e18c2a8c5bd7b1d56/lectures/15-model-spec/15-Model-Spec.html#1) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/15-model-spec/15-Model-Spec.pdf)  
+
 
 ## Labs
 
