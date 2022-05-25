@@ -82,6 +82,8 @@ There are five mapping components:
 
 ## `ggplot2` Walkthrough 
 
+### Key Components
+
 Every `ggplot2` plot has three key components:
 
 1. **Data**;
@@ -136,6 +138,8 @@ ggplot(gapminder, aes(lifeExp)) +
   geom_density() 
 ```
 
+### Aesthetic Attributes
+
 We may also specify aesthetic attributes such as color (`color`), size (`size`), and shape (`shape`) inside of `aes()`. 
 
 Let's specify the `color` aesthetic in our graph by including `color = variable` inside of `aes()`. 
@@ -172,6 +176,8 @@ ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, color = continent, size = pop/
   geom_point()
 ```
 
+### Scales
+
 `ggplot2` takes care of the details of converting data (e.g., ‘Africa’, ‘Asia’, ‘Europe’) into aesthetics (e.g., ‘red’, ‘yellow’, ‘green’) with a **scale**. 
 There is one scale for each aesthetic mapping in a plot. 
 The scale is also responsible for creating a guide, an axis or legend, that allows you to read the plot, converting aesthetic values back into data values. 
@@ -205,6 +211,8 @@ ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
   geom_point(size = 3, alpha = 1/2)
 ```
 
+### Faceting 
+
 Another technique for displaying additional categorical variables on a plot is faceting. 
 Faceting creates tables of graphics by splitting the data into subsets and displaying the same graph for each subset. 
 
@@ -217,6 +225,8 @@ ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
   facet_wrap(~continent)
 ```
 
+### Labels
+
 We may also modify plot labels using ggplot:
 
 ```{r}
@@ -227,6 +237,8 @@ ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
        color = "Continent",
        title = "GDP per Capita vs. Life Expectancy")
 ```
+
+### Themes
 
 Lastly, the `ggthemes` package gives us access to a variety of themes.
 Let's try out a few of them.
@@ -299,3 +311,66 @@ A favorite of mine -- the minimalistic theme:
 ```{r}
 p + theme_minimal()
 ```
+
+## Examples 
+
+```{r}
+ggplot(gapminder, aes(year, gdpPercap, color = country)) +
+  geom_line() +
+  theme_minimal() +
+  theme(legend.position="none") 
+```
+
+```{r}
+data <- gapminder |> group_by(year, continent) |> summarize(gdp = sum(gdpPercap*pop)) 
+ggplot(data, aes(year,gdp,color = continent)) +
+  geom_line() +
+  theme_minimal()
+```
+
+```{r}
+data <- gapminder |> filter(year == 2007) |> group_by(continent) |> summarize(gdp = sum(gdpPercap*pop)) 
+ggplot(data, aes(x = continent, y = gdp, fill = continent)) +
+  geom_col() +
+  theme_minimal()
+```
+
+```{r}
+ggplot(data, aes(x="", y=gdp, fill=continent)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0) +
+  theme_void() 
+```
+
+```{r}
+ggplot(gapminder, aes(lifeExp, fill = continent)) +
+  geom_histogram()+
+  theme_minimal() 
+```
+```{r}
+ggplot(gapminder, aes(lifeExp, fill = continent)) +
+  geom_density()+
+  theme_minimal() 
+```
+
+```{r}
+ggplot(gapminder, aes(lifeExp, fill = continent)) +
+  geom_density(alpha = 0.5, color = "white")+
+  theme_minimal() 
+```
+
+
+```{r}
+data <- gapminder |> filter(year %in% c(1952,2007))
+ggplot(data, aes(lifeExp, fill = factor(year))) +
+  geom_histogram(alpha = 0.5, color = "white", position = "dodge") +
+  theme_minimal() 
+```
+```{r}
+data <- gapminder |> filter(year %in% c(1952,2007))
+ggplot(data, aes(lifeExp, fill = factor(year))) +
+  geom_density(alpha = 0.5, color = "white") +
+  theme_minimal() 
+```
+
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;"></div>
