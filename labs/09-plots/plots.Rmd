@@ -1,0 +1,301 @@
+---
+title: "**Plots**"
+author: |
+        | Giorgi Nikolaishvili
+        | EC 320: Introduction to Econometrics
+        | University of Oregon
+date: "Spring 2022"
+output: 
+  html_document:
+    theme: flatly  
+    includes:
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+      
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F, cache = T)
+```
+
+--- 
+
+## Recap
+
+- Simple linear regression (using `lm()`)
+- Multivariate linear regression (using `lm()`)
+- Presenting estimation results (using `modelsummary()`)
+- Hypothesis testing on regression coefficients (using `summary()` and `qt()`)
+- Log-transformed regressands and regressors
+- Polynomial regressors
+- Dummy variables (a.k.a binary variables, indicators)
+- Interaction terms 
+
+---
+
+## Load Packages
+
+Install/load the `tidyverse`, `gapminder`, and `ggthemes` packages. 
+
+```{r}
+library(pacman)
+p_load(tidyverse, gapminder, ggthemes)
+```
+
+- `tidyverse`: gives us access to data manipulation functions, as well as the `ggplot2` package
+- `gapminder`: data source 
+- `ggthemes`: provides us with themes for ggplots
+
+Recall the `gapminder` dataset:
+
+```{r}
+head(gapminder, n = 15)
+```
+
+---
+
+## Overview of `ggplot2`
+
+- What makes `ggplot2` special is that it is based on the **Grammar of Graphics**, which allows us to create graphs by combining independent components.
+This makes `ggplot2` exceptionally flexible, and allows us to learn how to generate graphs by mastering a set of core principles rather than memorizing special approaches to each type of graph.
+
+- `ggplot2` is designed to work iteratively. You start with a layer that shows the raw data. Then you add layers of annotations and statistical summaries. 
+
+- The grammar of graphics describes the fundamental features that underlie all statistical graphics -- it is an answer to the question "What is a statistical graphic?"
+`ggplot2` builds on the grammar of graphics by focusing on layers and adapting it for use in R.
+In brief, the grammar tells us that a graphic maps the data to the aesthetic attributes (color, shape, size) of geometric objects (points, lines, bars). 
+The plot may also include statistical transformations of the data and information about the plot’s coordinate system. 
+The combination of these independent components are what make up a graphic.
+
+- All plots are composed of the data (the information you want to visualize) and a mapping (the description of how the data’s variables are mapped to aesthetic attributes). 
+There are five mapping components:
+
+  1. **Layer:** A layer is a collection of geometric elements and statistical transformations. Geometric elements (**geoms**) represent what you actually see in the plot: points, lines, polygons, etc. Statistical transformations (**stats**) summarize the data: for example, binning and counting observations to create a histogram, or fitting a linear model.
+  2. **Scale:** Scales map values in the data space to values in the aesthetic space. This includes the use of color, shape or size. Scales also draw the legend and axes, which make it possible to read the original data values from the plot.
+  3. **Coord:** A coord, or coordinate system, describes how data coordinates are mapped to the plane of the graphic. It also provides axes and gridlines to help read the graph.
+  4. **Facet:** A facet specifies how to break up and display subsets of data as small multiples. This is also known as conditioning or latticing/trellising.
+  5. **Theme:** A theme controls the finer points of display, like the font size and background color. 
+
+---
+
+## `ggplot2` Walkthrough 
+
+Every `ggplot2` plot has three key components:
+
+1. **Data**;
+2. A set of **aesthetic mappings** between variables in the data and visual properties (axes, color, size, etc.);
+3. At least one **layer** which describes how to render each observation (scatter plot, line plot, bar plot, etc.). Layers are usually created with a **geom** function.
+
+Example:
+
+```{r}
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point()
+```
+
+In the above plot:
+
+1. **Data** = `gapminder`;
+2. **Aesthetic mapping** = GDP per capita (`gdpPercap`) mapped to $x$-axis, life expectancy (`lifeExp`) mapped to $y$-axis;
+3. **Layer** = points.
+
+Notice that the data and aesthetic mappings are supplied in `ggplot()`.
+Then layers are added on with `+`. 
+
+Without adding the layer, we would have the following:
+
+```{r}
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp))
+```
+
+The proper way to construct plots using `ggplot2` is by adding components iteratively!
+
+Also, note that each new command (separated by `+`) is on a new line -- I recommend sticking to this convention to make your code more easily readable.
+
+Let's tweak our data slightly and use a different geom (`geom_line()`) to represent our observations as a line plot:
+
+```{r}
+ggplot(gapminder |> group_by(year) |> summarize(gdpPercap = mean(gdpPercap)),
+       aes(x = year, y = gdpPercap)) +
+  geom_line()
+```
+
+Now let's use the `geom_histogram()` geom to plot the histogram of the `lifeExp` variable sample in the raw dataset:
+
+```{r}
+ggplot(gapminder, aes(lifeExp)) + 
+  geom_histogram() 
+```
+
+Similarly, we may use the `geom_density()` geom to create a density plot of the `lifeExp` variable given our sample:
+
+```{r}
+ggplot(gapminder, aes(lifeExp)) + 
+  geom_density() 
+```
+
+We may also specify aesthetic attributes such as color (`color`), size (`size`), and shape (`shape`) inside of `aes()`. 
+
+Let's specify the `color` aesthetic in our graph by including `color = variable` inside of `aes()`. 
+In this case, let's color our observations by continent:
+
+```{r}
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point()
+```
+
+This gives each point a unique color corresponding to its associated continent. 
+The legend allows us to read data values from the color.
+
+Similarly, we may express the continent category of each observation by specifying the `shape` aesthetic (although this isn't as helpful).
+
+```{r}
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, shape = continent)) +
+  geom_point()
+```
+
+We may also specify the `size` aesthetic in our graph by including `size = variable` inside of `aes()`. 
+In this case, let's associated point size with population:
+
+```{r}
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, size = pop/1000000)) +
+  geom_point()
+```
+
+We can specify multiple aesthetics at the same time.
+For example, we may do `color = continent` and `size = pop/1000000` at the same time:
+
+```{r}
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, color = continent, size = pop/1000000)) +
+  geom_point()
+```
+
+`ggplot2` takes care of the details of converting data (e.g., ‘Africa’, ‘Asia’, ‘Europe’) into aesthetics (e.g., ‘red’, ‘yellow’, ‘green’) with a **scale**. 
+There is one scale for each aesthetic mapping in a plot. 
+The scale is also responsible for creating a guide, an axis or legend, that allows you to read the plot, converting aesthetic values back into data values. 
+We stick with the default scales provided by `ggplot2`, but it is possible to override them.
+
+If you want to set an aesthetic to a fixed value, without scaling it, do so in the individual layer outside of `aes()`:
+
+```{r}
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(color = "red")
+```
+
+
+```{r}
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(shape = 3)
+```
+
+```{r}
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(size = 5)
+```
+
+```{r}
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(color = "red", shape = 2, size = 5)
+```
+
+```{r}
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point(size = 3, alpha = 1/2)
+```
+
+Another technique for displaying additional categorical variables on a plot is faceting. 
+Faceting creates tables of graphics by splitting the data into subsets and displaying the same graph for each subset. 
+
+There are two types of faceting: grid and wrapped. Wrapped is the most useful, so we’ll discuss it here.
+To facet a plot you simply add a faceting specification with facet_wrap(), which takes the name of a variable preceded by ~:
+
+```{r}
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  facet_wrap(~continent)
+```
+
+We may also modify plot labels using ggplot:
+
+```{r}
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point(size = 3, alpha = 1/2) +
+  labs(x = "GDP per Capita",
+       y = "Life Expectancy (Years)",
+       color = "Continent",
+       title = "GDP per Capita vs. Life Expectancy")
+```
+
+Lastly, the `ggthemes` package gives us access to a variety of themes.
+Let's try out a few of them.
+But first, we save our plot as an object:
+
+```{r}
+p <- ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point(size = 3, alpha = 1/2) +
+  labs(x = "GDP per Capita",
+       y = "Life Expectancy (Years)",
+       color = "Continent",
+       title = "GDP per Capita vs. Life Expectancy")
+```
+
+Now, when we print `p`, we print our plot:
+
+```{r}
+p
+```
+
+Let's try out the Wall St. Journal theme:
+
+```{r}
+p + theme_wsj()
+```
+
+The Tufte theme is a classic:
+
+```{r}
+p + theme_tufte()
+```
+
+The Economist theme:
+
+```{r}
+p + theme_economist()
+```
+
+An alternative The Economist theme:
+
+```{r}
+p + theme_economist_white()
+```
+
+The old Excel theme:
+
+```{r}
+p + theme_excel()
+```
+
+The new Excel theme:
+
+```{r}
+p + theme_excel_new()
+```
+The Google Docs theme:
+
+```{r}
+p + theme_gdocs()
+```
+
+Theme Calc (no clue):
+
+```{r}
+p + theme_calc()
+```
+
+A favorite of mine -- the minimalistic theme:
+
+```{r}
+p + theme_minimal()
+```
