@@ -64,6 +64,9 @@ Each bullet point represents a given week.
 8. **Transformations, Dummies, and Interactions**
 [.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/labs/08-transformations-dummies-interactions/08-transformations-dummies-interactions.html)
 
+9. **Plots**
+[.html](https://raw.githack.com/emmettsaulnier/EC320s22/main/labs/09-plots/09-plots.html)
+
 ## Contributors
 
 Material for this course has contributions from [Ed Rubin](http://edrub.in/) ([@edrubin](https://github.com/edrubin)), [Kyle Raze](https://kyleraze.com/) ([@kyleraze](https://github.com/kyleraze)), and [Philip Economides](https://philip-economides.com/)([@peconomi](https://github.com/peconomi)), who have taught the class prior to me and graciously made their work public. I also source some material from [Nick Huntington-Klein](https://nickchk.com/) ([@NickCH-K](https://github.com/NickCH-K)), who maintains a [trove of resources](https://nickchk.com/causalgraphs.html) for learning causal inference. 
