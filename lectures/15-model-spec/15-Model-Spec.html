@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Model Specifications</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Emmett Saulnier" />
+    <script src="15-Model-Spec_files/header-attrs/header-attrs.js"></script>
+    <link href="15-Model-Spec_files/remark-css/default.css" rel="stylesheet" />
+    <link href="15-Model-Spec_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="15-Model-Spec_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Model Specifications
+## EC 320: Introduction to Econometrics
+### Emmett Saulnier
+### Spring 2022
+
+---
+
+class: inverse, middle
+
+
+
+# Prologue
+
+---
+# Rest of the term
+
+.hi-pink[Last 4 lectures]  
+- Today: Model specification  
+- Thursday: Differences in Differences part 1  
+- Next Tuesday: Differences in Differences part 2  
+- Next Thursday: Final exam review
+
+--
+
+.hi-pink[Last two problem sets]  
+- Analytical Problem Set 7 Due Friday  
+- Computational Problem Set 7 Due Monday  
+
+
+---
+
+# Model Specification
+
+### Today we'll be diving deeper on a few concepts  
+
+
+What are the consequences of excluding a variable that should be in the model?
+
+--
+
+.hi-pink[Omitted Variable Bias]
+ 
+--
+ 
+How do we test restrictions to model specifications?
+
+--
+
+.hi-pink[t and F tests]
+
+--
+
+### Plus one new topic:  
+
+--
+ 
+What happens if you have difficulty finding data on a variable and use a proxy instead?
+
+
+.hi-pink[Today's lesson]
+
+---
+class: inverse, middle
+
+# Omitted Variable Bias  
+
+---
+# Omitted Variable Bias  
+
+**Omitted variable bias** (OVB) arises when we omit a variable, `\(X_k\)` that
+
+--
+
+1. Affects the outcome variable `\(Y\)`, `\(\beta_k \neq 0\)`
+
+2. Correlates with an explanatory variable `\(X_j\)`, `\(Cov(X_j, X_k) \neq 0\)`, 
+
+Biases OLS estimator of `\(\beta_j\)`.
+
+
+.hi-pink[What is our formula for OVB?]
+
+--
+
+If we omit `\(X_k\)`, then the formula for the bias it creates in `\(\hat{\beta}_j\)` is...
+
+`$$Bias = \beta_k \frac{Cov(X_{j},X_{k})}{Var(X_{j})}$$` 
+.hi-pink[or equivalently] `\(Bias = \hat{\beta}^{short}_j - \hat{\beta}^{long}_j\)`
+
+---
+# Omitted Variable Bias  
+
+Suppose the true model is `\(y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + u_i\)` and all of our assumptions hold for this model. 
+
+--
+
+.hi-pink[What are the 6 OLS assumptions?]  
+
+--
+
+Thus, `\(\hat{\beta}^{long}_1\)` will be an unbiased estimate of `\(\beta_1\)`.  
+
+--
+
+Suppose we do not have data on `\(x_{2i}\)` and so we estimate `\(y_i = \beta_0 + \beta_1 x_{1i} + \varepsilon_i\)`
+
+.hi-pink[What is OLS formula for ] `\(\hat{\beta}^{short}_1\)` .hi-pink[?]  
+
+--
+
+`$$\hat{\beta}^{short}_1 = \frac{\sum_{i=1}^n(x_{1i} - \bar{x})(y_i-\bar{y})}{\sum_{i=1}^n(x_{1i} - \bar{x})^2}$$`
+
+
+---
+# Omitted Variable Bias  
+
+`\begin{align*}
+\hat{\beta}^{short}_1 &amp;= \frac{\sum_{i=1}^n(x_{1i} - \bar{x})(y_i-\bar{y})}{\sum_{i=1}^n(x_{1i} - \bar{x})^2} \\
+&amp;= \frac{Cov(x_{1i},y_i)}{Var(x_{1i})} \\
+&amp;= \frac{Cov(x_{1i},\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + u_i)}{Var(x_{1i})} \\
+&amp;= \frac{Cov(x_{1i},\beta_0)+\beta_1Cov(x_{1i},x_{1i})+\beta_2Cov(x_{1i}, x_{2i})+Cov(x_{1i},u_i)}{Var(x_{1i})}\\
+&amp;= 0 + \beta_1\frac{Cov(x_{1i},x_{1i})}{Var(x_{1i})} + \beta_2 \frac{Cov(x_{1i}, x_{2i})}{Var(x_{1i})} + \frac{Cov(x_{1i},u_i)}{Var(x_{1i})}\\
+&amp;= \beta_1 + \beta_2 \frac{Cov(x_{1i}, x_{2i})}{Var(x_{1i})} + \frac{Cov(x_{1i},u_i)}{Var(x_{1i})}
+\end{align*}`
+
+---
+# Omitted Variable Bias
+
+`\begin{align*}
+\hat{\beta}^{short}_j - \hat{\beta}^{long}_j &amp;= \left(\beta_1 + \beta_2 \frac{Cov(x_{1i}, x_{2i})}{Var(x_{1i})} + \frac{Cov(x_{1i},u_i)}{Var(x_{1i})}\right) \\
+&amp; \qquad\qquad  - \left(\beta_1 + \frac{Cov(x_{1i},u_i)}{Var(x_{1i})} \right)\\ 
+ &amp;= \beta_2 \frac{Cov(x_{1i}, x_{2i})}{Var(x_{1i})}.
+\end{align*}`
+
+--
+
+### In Summary   
+
+- Omitted bias happens when we do not include a variable that affects `\(y\)` (and thus is included in the error term) and also is correlated with `\(x\)`.   
+- It is an example of a violation of exogeneity.  `\(E[u_i|x] \neq 0\)` if we have an omitted variable  
+
+.hi-pink[It also invaldiates our standard errors]  
+
+
+---
+class: inverse, middle
+
+# Proxies in Model Specifications
+
+---
+# Proxies
+
+&lt;br&gt;
+
+Suppose you are considering the following model
+$$
+`\begin{aligned}
+y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + u_i
+\end{aligned}`
+$$
+
+While `\(x_1\)` is observed, suppose `\(x_2\)` **not able to be observed**. Cases of unobservable data could include:  
+
+- Vaguely defined with no explicit measure (e.g. quality of education)
+- Intangible and cannot be quantified (e.g. utility, ability)  
+- Requires so much time/energy that measurement is infeasible  
+- Confidentiality, privacy concerns may limit observed data availability  
+
+---
+
+# Proxies
+
+&lt;br&gt;
+
+Rather than exclude the unobservable, you may wish to use an adequate .hi-pink[proxy] variable for `\(x_2\)`.
+
+--
+
+A .hi-pink[proxy] variable is a substitute variable that may reasonably be supposed to maintain similar properties to our missing variable. 
+
+--
+
+.hi-blue[Example:] For quality of education, we could use the student-teacher ratio to have a measure of how many resources the educational institution makes available to students. Where quality is high, student-teacher ratios are low. 
+ 
+---
+
+# Proxies
+
+&lt;br&gt;
+
+Returning to the model, our true data generating process for `\(y\)`:
+$$
+`\begin{aligned}
+y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + u_i
+\end{aligned}`
+$$
+
+--
+
+In the case where we have no data on `\(x_2\)`, suppose we have an .hi-blue[ideal proxy] for it such that there exists an *exact linear relationship `\(x_2\)` and `\(Z\)`*:
+$$
+`\begin{aligned}
+x_2 = \lambda + \mu Z,
+\end{aligned}`
+$$
+
+where `\(\lambda\)` and `\(\mu\)` are fixed, unknown constants. We cannot estimate them by running a regression of the above relationship, since we have no data on `\(x_2\)`. .hi-pink[Let's sub in our expression and see what using Z achieves].
+
+---
+
+# Inference using Proxies
+
+Using `\(X_2 = \lambda + \mu Z\)`,
+$$
+`\begin{aligned}
+y = &amp; \beta_0 + \beta_1 x_1 + \beta_2 x_2 + u\\
+  = &amp; \beta_0 + \beta_1 x_1 + \beta_2 (\lambda + \mu Z) + u\\
+  = &amp; (\beta_0 + \beta_2 \lambda) + \beta_1 x_1 + \beta_2 \mu Z + u\\
+  = &amp; \ \ \ \ \ \  \ \alpha \ \ \ \ \ \ \ \ \ + \beta_1 x_1 + \ \ \gamma_2 Z + u
+\end{aligned}`
+$$
+
+--
+
+Takeaways:
+
+1. `\(\beta_1\)`, its standard error and t-stat will be same as if `\(X_2\)` used
+1. `\(R^2\)` will be the same as if `\(X_2\)` was used instead of Z
+1. The coefficient of Z, `\(\gamma_2\)`, will be estimate of `\(\beta_2 \mu\)`, and not possible to estimate `\(\beta_2\)` directly
+1. t-stat for `\(\gamma_2\)` same as `\(\beta_2\)`, so able to assess significance of `\(X_2\)`
+1. Not possible to estimate `\(\beta_0\)` since we now only see `\(\alpha\)`
+
+
+---
+
+# Risks of using Proxies
+
+Validity of all the subsequent takeaways rely on the condition that `\(Z\)` is an ideal proxy for `\(x_2\)`
+
+- In practice, unusual to find a proxy that is exactly linearly related to our missing variable
+
+- If the relationship is close to linear, the results will hold **approximately**
+
+-  The biggest problem faced is that there is never any manner by which to test this condition of whether the approximated difference is sufficiently small
+
+- Critical thinking in explaining your logical link between `\(X_2\)` &amp; `\(Z\)` and accepting that you are relying on a strong assumptions are often required to convince an audience that a proxy is indeed valid 
+
+
+---
+class: inverse, middle
+
+# Testing multiple restrictions
+
+
+---
+# F-test review  
+
+
+Suppose we have the model 
+
+`$$y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \beta_3 x_{3i} + u_i$$`
+
+and want to test `\(H_0: \beta_1 = 0\)` against the alternative `\(H_a: \beta_1 \neq 0\)`.
+
+.hi-pink[What are our options?]  
+
+--
+
+1. Run a t-test using the standard error of `\(\hat{\beta}_1\)`  
+2. Run an F-test with the coefficient restriction `\(\beta_1=0\)`.
+
+
+`$$F_{q,n-k-1} = \frac{RSS_r - RSS_u/q}{RSS_u/(n-k-1)}$$`
+
+---
+# Multiple Coefficient Restrictions  
+
+Suppose now we want to test `\(H_0: \beta_1 = 10,\ \beta_2 = \beta_3/5\)`. The alternative hypothesis is that at least one of these restrictions is wrong.  
+
+.hi-pink[What are the two regressions we have to run?]  
+
+--
+
+1. **Unrestricted** `\(y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \beta_3 x_{3i} + u_i\)`, gives us `\(RSS_u\)`    
+1. **Restricted** `\(y_i = \beta_0 + 10 x_{1i} + (\beta_3/5) x_{2i} + \beta_3 x_{3i} + u_i\)`, gives us `\(RSS_r\)`  
+
+--
+
+But we can't actually "run" the restricted model as-is, rearranging...    
+
+`$$(y_i - 10 x_{1i}) = \beta_0 + \beta_3 (x_{2i}/5 + x_{3i}) + u_i$$`  
+- Any variables without a parameter to be estimated go on the LHS with your outcome    
+- Any variables with the same parameter are combined together  
+
+
+---
+# Multiple Coefficient Restrictions  
+
+We now have everything we need to calculate the F-statistic. Suppose we have `\(n = 500\)` and  
+
+1. Unrestricted model: `\(RSS_u = 1000\)`    
+1. Restricted model: `\(RSS_r = 1010\)`
+
+--
+
+`$$F_{2,496} = \frac{1010-1000/2}{1000/500-3-1} = 4.96$$`
+and critical value `\(F_{crit} = 3.01\)` 
+
+.hi-pink[What is the conclusion of this test?]
+
+--
+
+We reject the null hypothesis in favor of the alternative. At least one of the restrictions we imposed is wrong.  
+
+
+
+
+---
+
+exclude: true
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
