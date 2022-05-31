@@ -38,6 +38,10 @@ The HTML versions of the lecture slides allow you to view animations and interac
 
 15. **Model Specification** [.html](https://rawcdn.githack.com/emmettsaulnier/EC320s22/7fc07fb1c8e79f88a0c8dd7e18c2a8c5bd7b1d56/lectures/15-model-spec/15-Model-Spec.html#1) | [.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/15-model-spec/15-Model-Spec.pdf)  
 
+16. **Difference-in-Differences**
+[.html](https://rawcdn.githack.com/emmettsaulnier/EC320s22/551ec131de9f2997a7ec0e87a8c31eb74e5f5e0f/lectures/16-did/16-Difference-in-Differences.html) |
+[.pdf](https://github.com/emmettsaulnier/EC320s22/blob/main/lectures/16-did/16-Difference-in-Differences.pdf)
+
 
 ## Labs
 
