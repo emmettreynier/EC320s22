@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Difference in Differences</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Emmett Saulnier" />
+    <script src="16-Difference-in-Differences_files/header-attrs/header-attrs.js"></script>
+    <link href="16-Difference-in-Differences_files/remark-css/default.css" rel="stylesheet" />
+    <link href="16-Difference-in-Differences_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="16-Difference-in-Differences_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <script src="16-Difference-in-Differences_files/kePrint/kePrint.js"></script>
+    <link href="16-Difference-in-Differences_files/lightable/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Difference in Differences
+## EC 320: Introduction to Econometrics
+### Emmett Saulnier
+### Spring 2022
+
+---
+
+class: inverse, middle
+
+
+
+# Prologue
+
+---
+# Housekeeping
+
+&lt;br&gt;
+
+.hi-pink[Course evaluations] are open  
+- If more than half of the class fills it out, I'll give 2 percentage points of extra credit  
+- I value your feedback! (but please be respectful)  
+
+--
+
+.hi-pink[Last problem sets]
+
+- Analytical problem set 7 due tomorrow (5/27)  
+- Computational problem set 7 due Wednesday (6/1)  
+
+
+---
+# Cholera in the 1850's
+
+.hi-pink[John Snow] used difference-in-differences in 1855 to prove that Cholera was being spread by contaminated water.  
+
+--
+
+&lt;img src="jon-snow.jpeg" width="80%" style="display: block; margin: auto;" /&gt;
+
+(Not this Jon Snow)
+
+---
+# Cholera in the 1850's
+
+
+.hi-pink[John Snow] used difference-in-differences in 1855 to prove that Cholera was being spread by contaminated water.  
+
+
+### Beliefs at the time 
+
+It was assumed at the time that Cholera was spread through things like...  
+
+- Rotting material and bad smells  
+- Low elevation  
+- Bad breeding  
+- Poverty  
+
+Great examples of .hi-pink[bad econometrics]    
+
+--
+
+**What might be an "ideal" experiment to test Snow's hypothesis?**
+
+---
+# Cholera in the 1850's
+
+### A change in water sources  
+
+Many companies served London's water needs. One of them, the Lambeth Company, changed the location of their water source  
+
+- **1849**: Thames River *downstream* from London 💩 
+- **1854**: Thames River *upstream* from London  
+
+--
+
+Our "treatment" is people having their water pumped from a .hi-blue[clean source]. Lambeth switching their water supply is a natural experiment  
+
+1. Calculate change in Cholera rates **before** and **after** the switch for people served by Lambeth  
+2. Calcuate the change in Cholera rates for some control group over the same time period  
+3. Take the difference between (1) and (2) .smallest[(*Hence the name, DiD*)]
+
+
+---
+# Cholera in the 1850's
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Supplier &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Death Rate 1849 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Death Rate 1854 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Non-Lambeth Only (Dirty) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 134.9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 146.6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Lambeth + Others (Mix clean + dirty) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 130.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 84.9 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+Change for .hi-blue[Lambeth]: `\(y_{L,1854} - y_{L,1849} = 84.9 - 130.1 = -45.2\)`
+
+**Q:** Is this all the evidence we need to conclude Cholera comes from water?  
+
+--
+
+**A:** No, it could reflect anything that changed between 1849 and 1854! 
+
+--
+
+Change .hi-orange[elsewhere]: `\(y_{NL,1854} - y_{NL,1849} = 146.6 - 134.9 = 11.7\)`
+
+
+Cholera rates were actually **increasing** in places not served by Lambeth over the same time period!  
+
+--
+
+Estimated treatment effect is `\(\Delta \bar{y}_L - \Delta \bar{y}_{NL}  = -45.2 - 11.7 = -56.9\)`
+
+
+---
+# Cholera in the 1850's
+
+
+Change .hi-orange[elsewhere]: `\(y_{NL,1854} - y_{NL,1849} = 146.6 - 134.9 = 11.7\)`  
+
+ - This is our estimate for the **counterfactual**    
+ - "Ideally" we'd know Cholera rates in 1854 for places served by .hi-blue[Lambeth] if they hadn't switched to clean water  
+ - But we only observe data from what actually happened  
+
+--
+
+Thus, the change .hi-orange[elsewhere] is our approximation of what *would have happened* in areas served by .hi-blue[Lambeth] if they did not switch. 
+
+--
+
+
+What are we assuming? 
+
+--
+
+The **Parallel Trends Assumption**.
+
+&gt;That the difference between .hi-blue[Lambeth] and .hi-orange[non-Lambeth] areas would have remained the same if .hi-blue[Lambeth] hadn't switched their water source. 
+
+
+---
+# Cholera in the 1850's
+
+
+### Actual outcomes  
+
+&lt;img src="16-Difference-in-Differences_files/figure-html/cholera_plot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Cholera in the 1850's
+
+
+### With our counterfactual  
+
+&lt;img src="16-Difference-in-Differences_files/figure-html/cholera_plot2-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+class: inverse, middle
+
+# Difference in Differences (DiD)
+
+---
+
+# Non-Random Treatment
+
+&lt;br&gt;
+
+We've talked about binary categorical variables. An important application of .hi-pink[dummy variables] is to study the impact of a treatment. 
+
+--
+
+The estimation of treatment effects is important in a wide range of fields. 
+.hi-blue[Examples:] 
+* impact of cash transfers on child health
+* effect of class size on student achievement
+
+--
+
+In clinical trials of health interventions, a common question is whether use of a medicine will improve health outcomes.  
+
+---
+
+# Non-Random Treatment
+
+Ideally treatment effects are evaluated using .hi-pink[randomized controlled trials].
+
+--
+
+We capture treatment with a dummy variable and use a simple statistical model  
+
+`$$Y_i = \beta_0 + \beta_1 D_i + u_i$$`
+
+--
+
+for `\(i = 1, \dots, n,\)` where `\(D_i = 1\)` if treated and `\(D_i = 0\)` if not treated, and
+where `\(y_i\)` is the outcome for individual `\(i\)`.  
+
+--
+
+**Q:** What are the interpretations of the coefficients `\(\beta_0\)` and `\(\beta_1\)`?  
+
+--
+
+**Random assignment**: If `\(D_i\)` and `\(u_i\)` are .hi-pink[uncorrelated (A3.)], then OLS estimates will be unbiased.  
+
+Our effect is the difference in mean outcomes for treated and untreated groups,
+`\(\hat\beta_1 = \bar y_1 - \bar y_0\)`, called the **differences estimator**
+
+---
+
+# Non-Random Treatment
+
+Often we are analyzing some _treatment_ that takes place at a particular time, and we have data .hi-pink[before and after] the treatment took place.  
+
+--
+
+If the policy intervention affected everyone and we have data both in pre- and post-policy periods, might consider using the **differences estimator**
+
+&gt; __Problem:__ Assumes that there are not other reasons for the change in mean outcomes before and after the treatment
+
+--
+
+In this case the dummy variable `\(D_i\)` in effect stands for the impact of .hi-pink[all factors], including the treatment, that are different between the pre- and post- periods.
+
+---
+
+# Non-Random Treatment
+
+Since .hi-pink[other factors] may be partially responsible for the change in mean outcomes, the difference estimator will likely be biased (example of exogeneity failing) 
+
+--
+
+This point emphasizes importance of a control group that does not receive the treatment. Sometimes policies have actual randomization, .hi-blue[(randomized field experiments)].
+
+--
+
+&gt; __Example:__ Oregon Health Plan (OHP) experiment of 2008. 
+Oregon decided to expand coverage of its version of Medicaid to groups not previously eligible, but this expanded coverage was rationed by a lottery to reduce the cost of the program: somewhat under half of those who registered were randomly selected and invited to apply for expanded coverage. 
+
+--
+
+Since treatment was randomly assigned, `\(E[u_i|D_i]=0\)`  
+
+
+---
+
+# DiD Concept
+
+Most of the time, we are not so lucky to have real randomization. Instead we often have to use .hi-pink[natural experiments].
+
+--
+
+&gt; __Setting:__ There is a discrete change in policy that affects only part of the population, and that there are both pre- and post-treatment observations for both those who received treatment and those who did not.
+
+--
+
+Since the policy change is not distributed randomly, mean outcomes for the treated and control group may differ for a variety of reasons.  
+
+--
+
+The .hi-pink[difference-in-difference (DiD)] method allows for differences between the treatment and control groups by measuring the treatment effect based on the **change** in outcomes before and after treatment for the treatment group **relative** to the control group.   
+
+---
+
+
+# DiD Structure
+
+&lt;br&gt;
+
+Suppose we have data on specific individuals `\(i = 1,\dots, n\)` in each of two time periods `\(t = 1, 2\)`. A simple statistical formulation of the model is then:
+
+--
+
+`$$Y_{it} = \beta_0 + \beta_1 T_t + \beta_2 D_i + \beta_3 (T_t \times D_i) + u_{it}$$`
+for `\(i = 1,\dots,n,\)` and `\(t = 1, 2\)`. (Note that we have `\(2n\)` data points). 
+
+--
+
+Here `\(T_t = 1\)` if `\(t = 2\)` and `\(T_t = 0\)` if `\(t = 1\)`, while `\(D_i = 1\)` if individual `\(i\)` receives treatment and `\(D_i = 0\)` if individual `\(i\)` does not receive treatment. 
+
+
+---
+
+# DiD Structure
+
+In the .hi-pink[pre-treatment period], `\(t = 1\implies T_t=0\)`, we have
+
+`$$E(y_{i1} | D_i = 0) = \beta_0 \qquad \text{and} \qquad E(y_{i1} | D_i = 1) = \beta_0 + \beta_2$$`
+
+--
+
+We are allowing for the possibility that there was imperfect control, in the sense that treated and untreated may have different pre-treatment means.  
+
+--
+
+In the .hi-pink[post-treatment period], `\(t = 2\implies T_t=1\)`, we have
+
+`$$E(y_{i2} | D_i = 0) = \beta_0 + \beta_1 \quad \text{and} \quad E(y_{i2} | D_i = 1) = \beta_0 + \beta_1 + \beta_2 + \beta_3$$`
+
+--
+
+The .hi-pink[treatment effect] corresponds to `\(\beta_3\)`: This is because
+$$
+`\begin{aligned}
+\text{Diff Treated:} &amp; \ E(y_{i2} | D_i = 1) - E(y_{i1} | D_i = 1) = \beta_1 + \beta_3 \ \  \text{and}\\
+\text{Diff Control:} &amp; \ E(y_{i2} | D_i = 0) - E(y_{i1} | D_i = 0) = \beta_1
+\end{aligned}`
+$$
+
+---
+
+# DiD Example
+
+_"Monetary Intervention in the Great Depression"_ by **Gary Richardson and William Troost (JPE, 2009)**.
+
+--
+
+Consider the 1930s bank failures. Central Bank can prevent bank runs and bank failures by acting as lender of last resort to insolvent banks.
+
+--
+
+The twelve different regional Federal Reserve Districts reacted in the 1930s to potential bank failures in different ways.
+
+--
+
+* .hi-slate[Atlanta FRB (sixth district)] and .hi-purple[St Louis FRB (eighth district)] followed radically different policies on bank runs 
+
+* Makes for a natural experiment, comparing outcomes for bank failures in Mississippi banks in the two districts
+
+---
+
+# DiD Example
+
+
+### Banking simplified...  
+
+- Banks take deposits from savers and then lend that money out to others  
+- They do not hold enough cash on hand to give everyone their savings back if everyone tried to withdraw at once  
+- Bank runs happen when people are afraid the bank is going to fail  
+  - Worry about bank failure =&gt; Some people widthdraw their money  
+  - More withdraws =&gt; more likely for the bank to fail  
+  - More likely for bank to fail =&gt; More people withdraw  
+
+--
+
+### Differential policies by fed district  
+
+The .hi-slate[Sixth District] made credit to banks widely available to ensure they had cash to cover withdraws, while .hi-purple[Eighth District] restricted lending to banks with the idea that it would "weed out" bad banks  
+
+---
+# DiD Example 
+
+&lt;img src="fed-districts.jpeg" width="80%" style="display: block; margin: auto;" /&gt;
+
+Mississippi is cut in half, the .hi-purple[northern part is St. Louis district] and the .hi-slate[southern part is Atlanta district].  
+
+--
+
+**We can use this as a natural experiment!**
+
+
+---
+# DiD Example  
+
+R&amp;T analyze this using .hi-pink[Difference-in-differences].
+
+&lt;table&gt;
+&lt;caption&gt;Bank Losses by Policy&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Variable &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 8th District &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 6th District &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Diff., 6th-8th &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; No. of Banks open 1930 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 165 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 135 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -30 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; No. of Banks open 1931 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 132 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 121 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -11 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Changes in banks open &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -33 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -14 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+Estimated to have saved **19** banks, 14% of .hi-slate[Sixth District] in 1930.
+
+--
+
+.smallest[
+*Note*: It is equivalent to think of the DiD estimator as  
+- The difference in the change in the treated and the change in the untreated 
+- The change in the difference between treated and untreated pre/post treatment  
+]  
+
+---
+
+# DiD Required Assumption
+
+A central issue is the .hi-pink[validity] of the control group, which is determined by the  .hi-pink[parallel trends] assumption: 
+
+&gt; In the absence of the _"treatment"_, would the number of open banks in the two
+districts have been expected to evolve in the same way?  
+
+
+
+&lt;img src="16-Difference-in-Differences_files/figure-html/plot-banks-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# DiD Interpretation
+
+### Now with a DiD Regression  
+
+$$
+`\begin{aligned}
+Y_{dt} = \beta_0 + \beta_1 T_t + \beta_2 D_d  + \beta_3 (T_t \times D_d) + u_{dt}
+\end{aligned}`
+$$
+
+One can use this data to get an estimate of the treatment effect `\(\hat\beta_3\)` and a standard error `\(SE(\hat\beta_3)\)` based on these twelve data points:
+
+$$
+`\begin{aligned}
+Y_{dt} = 167 - 49 T_t - 29 D_d  + 20.5(T_t \times D_d) + u_{dt}
+\end{aligned}`
+$$
+
+Here `\(T_t\)` is coded 1 for 1931 or later, and `\(D_d=1\)` for the 6th District. 
+
+--
+
+`\(\hat{\beta}_3\)` has `\(t = 1.9\)` which is significant at 10% level using a two-tailed test. 
+
+This is about the best we can do with twelve data points.  
+
+---
+
+# DiD Interpretation
+
+&lt;img src="16-Difference-in-Differences_files/figure-html/plot-banks-c-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+The dashed line represents our assumed **counterfactual**. 
+
+
+---
+
+# DiD Interpretation
+
+Let's do the same .hi-pink[DiD] with other outcome variables!
+
+&lt;img src="table5_1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+--
+
+Seems like more liberal credit availability saved a lot of wholesale firms.  
+
+
+---
+class: inverse, middle
+
+# Panel Data  
+
+
+
+
+---
+# Types of data 
+
+- **Cross sectional**: Observe some set of entity at one particular time  
+- **Time Series**: Observe a single entity over multiple time periods  
+- **Pooled Cross sectional**: Have a sample of entities over multiple time periods, but don't necessarily observe the same entities each period  
+
+--
+
+.pull-left[
+.hi-yellow[Cross-sectional data:] individual `\(i\)`
+&lt;img src="16-Difference-in-Differences_files/figure-html/cross_sectional_plot-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+.hi-purple[Time-series data:] time `\(t\)`
+&lt;img src="16-Difference-in-Differences_files/figure-html/time_series_plot-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+--
+
+.hi-pink[*Panel data*] combine these data types/dimensions: individual `\(i\)` **at** time `\(t\)`.
+---
+layout: false
+class: clear-slide
+
+.hi-pink[*Panel data*] combine these data types/dimensions: individual `\(i\)` **at** time `\(t\)`.
+
+&lt;img src="16-Difference-in-Differences_files/figure-html/panel_plot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+name: definition
+
+# Definition
+
+.pull-left[
+
+With .hi-pink[*panel data*], we have
+
+- .hi-purple[repeated observations] `\((t)\)`
+- on .hi-yellow[multiple individuals] `\((i)\)`.
+]
+
+--
+
+.pull-right[
+
+```
+#&gt;   state year poverty_rate min_wage
+#&gt; 1    CA 1990         13.9     4.25
+#&gt; 2    CA 2000         12.7     6.25
+#&gt; 3    CA 2010         16.3     8.00
+#&gt; 4    OR 1990          9.2     4.25
+#&gt; 5    OR 2000         10.9     6.50
+#&gt; 6    OR 2010         14.2     8.40
+#&gt; 7    WA 1990          8.9     4.25
+#&gt; 8    WA 2000         10.8     6.50
+#&gt; 9    WA 2010         11.5     8.55
+```
+]
+
+--
+
+Thus, our regression equation with a panel dataset looks like
+$$
+`\begin{align}
+  y_{\color{#FFA500}{i}\color{#6A5ACD}{t}} = \beta_0 + \beta_1 x_{\color{#FFA500}{i}\color{#6A5ACD}{t}} + u_{\color{#FFA500}{i}\color{#6A5ACD}{t}}
+\end{align}`
+$$
+for .yellow[individual] `\(\color{#FFA500}{i}\)` in .purple[time] `\(\color{#6A5ACD}{t}\)`.
+
+
+---
+# Controlling for unobserved factors  
+
+We can use panel data to control for any unobserved factors that are constant within a larger group, **a solution to Omitted Variable Bias**.  
+
+.hi-orange[How?]  
+
+--
+
+Easy! Just add a dummy variable for the group, and you've controlled for everything that is constant within that group. These are called .hi-orange[fixed effects].  
+
+--
+
+### For example  
+- We can control for an individual's background, which is not changing over time, by adding an individual fixed effect  
+- We can control for national economic conditions, which affect all individuals equally in a particular time period, by adding a time fixed effect   
+
+---
+# Fixed effects model  
+
+Suppose we have a model 
+
+`$$y_{it} = \beta_0 + \beta_1 x_{it} + \sum_k \gamma_k Z_i^k + u_{it}$$`
+
+where `\(Z_i^1,Z_i^2,...,Z_i^K\)` are `\(K\)` variables that affect `\(y\)`, but are constant within individual `\(i\)`. 
+
+--
+
+Then we can substitute `\(\alpha_i = \sum_k \gamma_k Z_i^k\)`
+
+`$$y_{it} = \beta_0 + \beta_1 x_{it} + \alpha_i + u_{it}$$`
+
+where `\(\alpha_i\)` represents the unobserved effect of all of the `\(Z^k\)` variables on `\(y\)` for individual `\(i\)`. 
+
+---
+# Fixed effects model
+
+Practically, we can run this regression with a dummy variable for each individual (minus one)
+
+`$$y_{it} = \beta_0 + \beta_1 x_{it} + \sum_{i=2}^n\alpha_iA_i + u_{it}$$`
+
+where `\(A_i\)` is a dummy variable equal to 1 if the observation comes from individual `\(i\)`.
+
+--
+
+**What are the fixed effects doing?**  
+They subtract the mean outcome for each individual `\(y_{it}-\bar{y}_i\)`. Thus, we are looking at .hi-orange[within] variation, not .hi-blue[between] variation  
+
+--
+
+.hi-blue["Between"] is any variation in our data that can be explained by individuals  
+.hi-orange["Within"] is any variation for an individual from one time period to another  
+
+---
+# We have seen this before...   
+
+.center[![Control](control.gif)]
+
+
+---
+
+class: inverse, middle
+
+# DiD Example, Minimum Legal Drinking Age Laws
+
+---
+# MLDA Laws
+
+This DiD estimates MLDA-induced deaths among 18-20 year olds, from 1970-1983.
+
+--
+
+**1933:** End of the federal alcohol Prohibition. Most states regulated the .hi-pink[Minimum Legal Drinking Age] to 21. However, some states including Kansas, New York and North Carolina maintained a drinking age of 18. 
+
+--
+
+**1971:** Voting ages were reduced to 18, and many states coincided this policy change of MLDA to 18. Arkansas, California, and Pennsylvania are among states that kept MLDA at 21. 
+
+--
+
+**1984:** National Minimum Drinking Age Act punished states set to 18 by withholding federal highway construction aid. 
+
+--
+
+.hi-blue[What happened between 1970 and 1984 when drinking age was reduced?]
+
+
+---
+# MLDA DiD model
+
+### Alabama and Arkansas  
+Alabama reduced MLDA to 19 in 1975, while Arkansas did not change theirs, let `\(D_s\)` indicate whether the state is Alabama and `\(T_t\)` is indicate whether it is after 1975.  
+
+.hi-blue[Dependent variable:] death rates of 18-20 year olds in state `\(s\)` and year `\(t\)`.
+
+--
+
+`$$Y_{st} = \beta_0 + \beta_1 \text{D}_s + \beta_2 \text{T}_t + \beta_3 (D_s \times T_t) + u_{st},$$`
+--
+
+.hi-pink[Treatment Effect:] `\(\beta_3\)` measures the *causal* effect of lowering the drinking age on death rates of 18-20 year olds.  
+ 
+--
+
+.hi-pink[Key Assumption:] Alabama and Arkansas would have shared parallel trends in their death rates of 18-20 year olds throughout the period of analysis if Alabama had not changed their drinking age.   
+
+---
+# MLDA DiD model
+
+### We can do better!  
+What about the other states? Would we not want to use more observations?
+Yes! But..
+
+--
+
+* States did not all lower to 18 at the same time, meaning there is no common post-treatment  period.
+
+* Unobservable differences exist across states, constant across time. 
+
+* Absense of a common treatment variable in a multi-state setting, since states chose ages of 18,19 and 20. 
+
+--
+
+To solve for these issues, use .hi-blue[state and year fixed effects] and replace `\(T_t \times D_d\)` with a .hi-blue[common treatment variable], `\(LEGAL_{st}\)`, which measures the proportion of 18-20 year-olds allowed to drink in state `\(s\)` and year `\(t\)`. 
+
+---
+
+# MLDA DiD model
+
+&lt;br&gt;
+
+.hi-blue[State-Year Panel Data:] Including District of Col. we have 51 "states" and 14 years, giving us 714 observations. 
+
+--
+
+The .hi-blue[multistate regression] DiD model looks like:
+
+`$$Y_{st} = \alpha_0 + \alpha_1 LEGAL_{st} + \sum_{k=\text{Alaska}}^{\text{Wyoming}} \alpha_k \text{State}_{ks} +\sum_{j=\text{1971}}^{\text{1983}} \alpha_j \text{Year}_{jt} + \nu_{st},$$`
+
+where now we are using state and year dummies to capture fixed effects, which uses Alabama as our reference state and 1970 as our reference year.
+
+--
+
+Regression results suggest that there was a significant increase in deaths, largely attributed to motor vehicle accidents.
+
+---
+
+# MLDA Results
+
+&lt;img src="table5_2.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# MLDA Assumptions
+
+Since we have many states and many years of observations, we can relax the .hi-pink[common trends] assumption. 
+
+We are worried about differential trends in state death rates that would lead us to falsely attribute that pre-existing trend to our treatment.  
+
+--
+
+We can add .hi-blue[state trends] to control for this factor:  
+
+$$
+`\begin{aligned}
+Y_{st} =&amp; \alpha_0 + \alpha_1 LEGAL_{st} + \sum_{k=\text{Alaska}}^{\text{Wyoming}} \alpha_k \text{State}_{ks} +\sum_{j=\text{1971}}^{\text{1983}} \alpha_j \text{Year}_{jt}\\
+&amp; \sum_{k=\text{Alaska}}^{\text{Wyoming}} \theta_k (\text{State}_{ks} \times t)+ \varepsilon_{st},
+\end{aligned}`
+$$
+
+Our treatment effect now comes from sharp deviations from an otherwise smooth trend.  
+
+--
+.hi-blue[What does this allow us to address?]
+
+---
+
+
+
+# MLDA Assumptions
+
+&lt;img src="fig5_4.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# MLDA Assumptions
+
+&lt;img src="fig5_5.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# MLDA Assumptions
+
+&lt;img src="fig5_6.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+exclude: true
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
